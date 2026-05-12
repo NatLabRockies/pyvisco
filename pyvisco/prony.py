@@ -459,24 +459,41 @@ def fit_freq(df_dis, df_master, opt=False):
 
     #Estimate instantaneous (E_0) and equilibrium (E_inf) modulus
     E_0 = df_dis.E_0
+    if opt:
+        #Get measurement data
+        E_freq_meas = np.concatenate((df_master[stor]/E_0, 
+                                        df_master[loss]/E_0))
+        omega_meas = df_master['omega'].values
 
-    #Get measurement data
-    E_freq_meas = np.concatenate((df_master[stor]/E_0, 
-                                    df_master[loss]/E_0))
-    omega_meas = df_master['omega'].values
+        #Get Prony series
+        tau_i = df_dis['tau_i'].values
+        x0 = np.hstack((alpha_i, tau_i))
 
-    #Get Prony series
-    tau_i = df_dis['tau_i'].values
-    x0 = np.hstack((alpha_i, tau_i))
+        #Define bounds
+        bnd_a = ((0,1),)*alpha_i.shape[0]
 
-    #Define bounds
-    bnd_a = ((0,1),)*alpha_i.shape[0]
+        #Perform minimization to obtain alpha_i
+        res = minimize(ls_res(E_freq_norm), alpha_i, 
+            args=(tau_i, E_freq_meas, omega_meas), method='L-BFGS-B', bounds=bnd_a)
+        alpha_i = res.x
+        err = res.fun
+    else:
+        E_inf = df_dis.E_inf
+        #Assembly 'K_global' matrix [Kraus 2017, Eq. 22]
+        N = df_dis.nprony 
+        K_stor = np.tril(np.ones((N,N)), -1) + np.diag([0.5] * N)
+        K_loss = (np.diag([0.5] * N) 
+            + np.diag([0.1] * (N-1), 1) + np.diag([0.1] * (N-1), -1) 
+            + np.diag([0.01] * (N-2), 2) + np.diag([0.01] * (N-2), -2)
+            + np.diag([0.001] * (N-3), 3) + np.diag([0.001] * (N-3), -3))
+        K_global = np.vstack([K_stor, K_loss, np.ones((1,N))])
+        #Assembly right-hand vector
+        E = np.concatenate((df_dis[stor]/(E_0-E_inf), 
+                            df_dis[loss]/(E_0-E_inf), 
+                            np.array([1])))
 
-    #Perform minimization to obtain alpha_i
-    res = minimize(ls_res(E_freq_norm), alpha_i, 
-        args=(tau_i, E_freq_meas, omega_meas), method='L-BFGS-B', bounds=bnd_a)
-    alpha_i = res.x
-    err = res.fun
+        #Solve equation system
+        alpha_i, err = nnls(K_global, E)
 
     ###############################################################################
     # DEPRECATED - Error gets large for certain viscoelastic materials
