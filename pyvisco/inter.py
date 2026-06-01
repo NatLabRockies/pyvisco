@@ -39,6 +39,33 @@ class bcolors:
 bcolors = bcolors()
 
 
+def _file_upload_bytes(widget):
+    """Return the bytes payload of the first file in a FileUpload widget.
+
+    Handles the ipywidgets 8 API where ``FileUpload.value`` is a tuple of
+    ``{'name', 'type', 'size', 'last_modified', 'content'}`` mappings and
+    ``content`` is a ``memoryview``. Falls back to the legacy ipywidgets 7
+    ``.data`` attribute when present. Returns ``None`` when the widget holds
+    no uploaded file (e.g. after a reset).
+    """
+    # ipywidgets >= 8
+    value = getattr(widget, "value", None)
+    if value:
+        try:
+            content = value[0]["content"]
+        except (KeyError, TypeError, IndexError):
+            content = None
+        if content is not None:
+            return bytes(content)
+
+    # ipywidgets 7 fallback
+    data = getattr(widget, "data", None)
+    if data:
+        return data[0]
+
+    return None
+
+
 def generate_zip(files):
     """
     Generate zip archive from collection of dataframes and figures.
@@ -174,7 +201,8 @@ class Widgets():
             multiple=False,
             button_style='success',
             layout = widgets.Layout(height = _height, width = _width_b))
-        self.up_inp.observe(self.inter_load_modul, names='_counter')
+        # ipywidgets >= 8: observe `value` (the `_counter` trait was removed)
+        self.up_inp.observe(self.inter_load_modul, names='value')
 
         #Out modulus data
         self.out_load_modul = widgets.Output()
@@ -205,7 +233,8 @@ class Widgets():
             disabled=True,
             button_style='success',
             layout = widgets.Layout(height = _height, width = _width_b))
-        self.up_shift.observe(self.inter_load_shift, names='_counter')
+        # ipywidgets >= 8: observe `value` (the `_counter` trait was removed)
+        self.up_shift.observe(self.inter_load_shift, names='value')
 
         #Out shift factor
         self.out_load_shift = widgets.Output()
@@ -756,6 +785,22 @@ class Control(Widgets):
                 with _out:
                     _msg = 'Upload modul data before uploading shift factors!'
                     print(f'{bcolors.FAIL}' + _msg + f'{bcolors.ENDC}')
+            except Exception as e:
+                # Catch-all so unexpected errors (e.g. ImportError for
+                # ``xlrd`` when reading legacy .xls files) are surfaced in
+                # the notebook instead of being silently swallowed by the
+                # widget observer machinery. Also echo to stderr so the
+                # traceback is visible in the server / Voila log even if the
+                # output widget gets cleared by a later reset.
+                import sys
+                import traceback
+                tb = traceback.format_exc()
+                print(tb, file=sys.stderr)
+                with _out:
+                    _msg = 'Unexpected error while loading file:'
+                    print(f'{bcolors.FAIL}' + _msg + f'{bcolors.ENDC}')
+                    print(f'{type(e).__name__}: {e}')
+                    print(tb)
         return wrap
        
     """
@@ -833,29 +878,35 @@ class Control(Widgets):
         """
         Execute interactive routine to load modulus data from file.
         """
+        # ipywidgets >= 8: FileUpload.value is a tuple of dicts; ignore the
+        # "cleared" event that fires with an empty tuple during reset.
+        _upload = _file_upload_bytes(self.up_inp)
+        if _upload is None:
+            return
+
         self.reset_notebook()
 
         #Load modulus
         if self.rb_instrument.value == 'Eplexor':
             if self.rb_type.value == 'master':
-                _epl  = load.Eplexor_master(self.up_inp.data[0], self.modul)
+                _epl  = load.Eplexor_master(_upload, self.modul)
                 self.df_master, self.df_aT, self.df_WLF, self.units = _epl
                 self.set_RefT(self.df_master.RefT)
                 self.ft_RefT.disabled = True
             elif self.rb_type.value == 'raw':
                 self.df_raw, self.arr_RefT, self.units = load.Eplexor_raw(
-                    self.up_inp.data[0], self.modul)
+                    _upload, self.modul)
                 self.set_RefT(self.ft_RefT.value)
         elif self.rb_instrument.value == 'user':
             if self.rb_type.value == 'master':
-                _master = load.user_master(self.up_inp.data[0], 
+                _master = load.user_master(_upload, 
                     self.rb_domain.value, self.RefT, self.modul)
                 self.df_master, self.units = _master
                 self.set_RefT(0)
                 self.ft_RefT.disabled = False
             elif self.rb_type.value == 'raw':
                 self.df_raw, self.arr_RefT, self.units = load.user_raw(
-                    self.up_inp.data[0], self.rb_domain.value, self.modul)
+                    _upload, self.rb_domain.value, self.modul)
                 self.set_RefT(self.ft_RefT.value)
 
         #Add data to file package and update widgets
@@ -901,12 +952,17 @@ class Control(Widgets):
         """
         Execute interactive routine to load shift factors from file.
         """
+        # ipywidgets >= 8: ignore the "cleared" event with an empty value tuple.
+        _upload = _file_upload_bytes(self.up_shift)
+        if _upload is None:
+            return
+
         with self.out_load_shift:
             clear_output()
 
         #Load shift factors
         if self.cb_shift.value:
-            self.df_aT = load.user_shift(self.up_shift.data[0])
+            self.df_aT = load.user_shift(_upload)
             if isinstance(self.arr_RefT, pd.Series): 
                 _T_shift = self.df_aT['T'].sort_values(
                     ignore_index=True).to_numpy(dtype=float)
