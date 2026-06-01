@@ -25,11 +25,18 @@ def load_prony_ANSYS(filepath):
     alpha_i = []
     tau_i = []
     mod = True
+    nterms = None
     with open(filepath) as f:
         for line in f:
             lsplit = line.rstrip("\n").split(",")
             if lsplit[0] == "TB":
-                int(lsplit[4])
+                # APDL: TB,PRONY,matid,ntemp,nterms,...
+                # `nterms` is the declared number of Prony pairs; capture it
+                # so we can validate the parsed payload below.
+                try:
+                    nterms = int(lsplit[4])
+                except (IndexError, ValueError):
+                    nterms = None
             if lsplit[0] == "TBDATA":
                 if len(lsplit) == 5:
                     if mod:
@@ -73,6 +80,16 @@ def load_prony_ANSYS(filepath):
     # f.close()
     alpha_i = np.array(alpha_i, dtype=float)
     tau_i = np.array(tau_i, dtype=float)
+    if alpha_i.size != tau_i.size:
+        raise ValueError(
+            f"Malformed ANSYS .MPL file '{filepath}': parsed "
+            f"{alpha_i.size} alpha_i values but {tau_i.size} tau_i values."
+        )
+    if nterms is not None and alpha_i.size != nterms:
+        raise ValueError(
+            f"Malformed ANSYS .MPL file '{filepath}': TB record declared "
+            f"{nterms} Prony pairs but parsed {alpha_i.size}."
+        )
     df_prony = pd.DataFrame([tau_i, alpha_i]).T
     df_prony.columns = ["tau_i", "alpha_i"]
     df_prony.index += 1

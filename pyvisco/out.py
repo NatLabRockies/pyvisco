@@ -69,11 +69,12 @@ def to_csv(df, units, index_label=None, filepath=None):
 
     Returns
     -------
-    pandas.DataFrame
-        If filepath is specified the dataframe will be written to a csv file.
-        If filepath is not specified, the function returns a bytes object
-        containing the csv file data.
+    str or None
+        If ``filepath`` is ``None``, returns the CSV content as a string.
+        If ``filepath`` is specified, the CSV is written to disk and the
+        function returns ``None``.
     """
+
     df = add_units(df, units, index_label)
     if index_label is None:
         index = False
