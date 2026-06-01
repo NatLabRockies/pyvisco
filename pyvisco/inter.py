@@ -107,8 +107,7 @@ class Widgets():
         self.ini_variables()
         self.widgets()
         styles.format_fig()
-        #styles.format_HTML(self.out_html)
-        
+        # styles.format_HTML(self.out_html)
 
     def ini_variables(self):
         """
@@ -118,18 +117,20 @@ class Widgets():
         self.nprony = 0
         self.modul = 'E'
 
-
     def widgets(self):
         """
         Define GUI widgets.
-        """      
+        """
+
         _height = 'auto'
         _width = 'auto'
         _width_b = '200px'
-        _layout = {'width' : '100%', 
-                   'display' : 'inline-flex',
-                   'justify_content' : 'space-between',
-                   'flex_flow' : 'row wrap'}
+        _layout = {
+            "width": "100%",
+            "display": "inline-flex",
+            "justify_content": "space-between",
+            "flex_flow": "row wrap",
+        }
 
         _layout_around = _layout.copy()
         _layout_around['justify_content'] = 'space-around'
@@ -142,51 +143,54 @@ class Widgets():
         Section - Overview
         ------------------------------------------------------------------------
         """
-        #Theory button
+        # Theory button
         self.b_theory = widgets.ToggleButton(
             value=False,
             description='Click here for more details!',
             layout = widgets.Layout(width = '200px'))
         self.b_theory.observe(self.show_theory, 'value')
 
-        #Theory out
+        # Theory out
         self.out_theory = widgets.HTMLMath(value='')
-        
+
         """
         ------------------------------------------------------------------------
         Subsection - Specify input and upload data
         ------------------------------------------------------------------------
         """
-        #Modulus data 
-        #-----------------------------------------------------------------------
-        #Domain
+        # Modulus data
+        # -----------------------------------------------------------------------
+        # Domain
         self.rb_domain = widgets.RadioButtons(
-            options=['freq', 'time'],
-            value='freq', 
-            description='Domain:',
+            options=["freq", "time"],
+            value="freq",
+            description="Domain:",
             disabled=False,
-            layout = widgets.Layout(height = _height, width = _width))
+            layout=widgets.Layout(height=_height, width=_width),
+        )
         self.rb_domain.observe(self.set_domain, 'value')
 
-        #Loading direction
+        # Loading direction
         self.rb_loading = widgets.RadioButtons(
-            options=['tensile', 'shear'],
-            value='tensile', 
-            description='Loading:',
+            options=["tensile", "shear"],
+            value="tensile",
+            description="Loading:",
             disabled=False,
-            layout = widgets.Layout(height = _height, width = _width))
+            layout=widgets.Layout(height=_height, width=_width),
+        )
         self.rb_loading.observe(self.set_loading, 'value')
 
-        #Instrument
+        # Instrument
         self.rb_instrument = widgets.RadioButtons(
-            options=['Eplexor', 'user'],
-            value='Eplexor', 
-            description='Instrument:',
+            options=["Eplexor", "user"],
+            value="Eplexor",
+            description="Instrument:",
             disabled=False,
-            layout = widgets.Layout(height = _height, width = _width))
+            layout=widgets.Layout(height=_height, width=_width),
+        )
         self.rb_instrument.observe(self.set_instrument, 'value')
 
-        #Type
+        # Type
         self.rb_type = widgets.RadioButtons(
             options=['master', 'raw'],
             value='master',
@@ -195,7 +199,7 @@ class Widgets():
             layout = widgets.Layout(height = _height, width = _width))
         self.rb_type.observe(self.set_type, 'value')
 
-        #Upload modulus data
+        # Upload modulus data
         self.up_inp = widgets.FileUpload(
             accept= '.xls, .xlsx',
             multiple=False,
@@ -204,51 +208,51 @@ class Widgets():
         # ipywidgets >= 8: observe `value` (the `_counter` trait was removed)
         self.up_inp.observe(self.inter_load_modul, names='value')
 
-        #Out modulus data
+        # Out modulus data
         self.out_load_modul = widgets.Output()
 
-        #Layout
+        # Layout
         _inp_gen = widgets.HBox([self.rb_domain, self.rb_loading, self.rb_instrument,
             self.rb_type, self.up_inp,], layout = widgets.Layout(**_layout))
         self.w_inp_gen = widgets.VBox([_inp_gen, self.out_load_modul],
             layout = widgets.Layout(**_layout))
 
-
-        #Shift factor data 
-        #-----------------------------------------------------------------------
-        #User shift factors
+        # Shift factor data
+        # -----------------------------------------------------------------------
+        # User shift factors
         self.cb_shift = widgets.Checkbox(
-            value=False, 
-            description='user shift factors',
+            value=False,
+            description="user shift factors",
             disabled=False,
-            indent = True,
-            layout = widgets.Layout(height = _height, width = _width),
-            style = {'description_width' : 'initial'})
+            indent=True,
+            layout=widgets.Layout(height=_height, width=_width),
+            style={"description_width": "initial"},
+        )
         self.cb_shift.observe(self.set_shift, 'value')
 
-        #Upload shift factor
+        # Upload shift factor
         self.up_shift = widgets.FileUpload(
-            accept='.csv, .xls', 
-            multiple=False, 
+            accept=".csv, .xls",
+            multiple=False,
             disabled=True,
-            button_style='success',
-            layout = widgets.Layout(height = _height, width = _width_b))
+            button_style="success",
+            layout=widgets.Layout(height=_height, width=_width_b),
+        )
         # ipywidgets >= 8: observe `value` (the `_counter` trait was removed)
         self.up_shift.observe(self.inter_load_shift, names='value')
 
-        #Out shift factor
+        # Out shift factor
         self.out_load_shift = widgets.Output()
 
-        #Layout
+        # Layout
         _inp_shift = widgets.HBox([self.cb_shift, self.up_shift],
             layout = widgets.Layout(**_layout))
         self.w_inp_shift = widgets.VBox([_inp_shift, self.out_load_shift],
             layout = widgets.Layout(**_layout))
 
-
-        #Reference temperature
-        #-----------------------------------------------------------------------
-        #Reference Temperature - FloatText
+        # Reference temperature
+        # -----------------------------------------------------------------------
+        # Reference Temperature - FloatText
         self.ft_RefT = widgets.FloatText(
             value=self.RefT,
             description='Reference temperature (\N{DEGREE SIGN}C):',
@@ -257,8 +261,7 @@ class Widgets():
             style = {'description_width' : 'initial'})
         self.ft_RefT.observe(self.set_RefT, 'value')
 
-
-        #Reference Temperature - Dropdown
+        # Reference Temperature - Dropdown
         self.dd_RefT = widgets.Dropdown(
             description='Reference temperature (\N{DEGREE SIGN}C):',
             disabled=False,
@@ -266,12 +269,11 @@ class Widgets():
             style = {'description_width' : 'initial'})
         self.dd_RefT.observe(self.set_RefT, 'value')
 
-        #Layout
+        # Layout
         self.w_RefT = widgets.HBox([self.ft_RefT])
 
-
-        #Control section
-        #-----------------------------------------------------------------------
+        # Control section
+        # -----------------------------------------------------------------------
         self.v_modulus = widgets.Valid(
             value=False,
             description='Modul',
@@ -294,20 +296,20 @@ class Widgets():
             style = {'description_width' : 'initial'},
             layout = widgets.Layout(height = _height, width = _width_b))
 
-        #Layout
-        _valid = widgets.HBox([self.v_modulus, self.v_aT, self.v_WLF], 
-            layout = widgets.Layout(**_layout_around))
-        self.w_check_inp = widgets.VBox([_valid]) 
-
+        # Layout
+        _valid = widgets.HBox(
+            [self.v_modulus, self.v_aT, self.v_WLF], layout=widgets.Layout(**_layout_around)
+        )
+        self.w_check_inp = widgets.VBox([_valid])
 
         """
         ------------------------------------------------------------------------
         Subsection - Time-temperature superposition
         ------------------------------------------------------------------------
         """
-        #Shift factors
-        #-----------------------------------------------------------------------
-        #Fit and plot shift factors
+        # Shift factors
+        # -----------------------------------------------------------------------
+        # Fit and plot shift factors
         self.b_aT = widgets.Button(
             description='master raw data',
             button_style='info',
@@ -315,66 +317,65 @@ class Widgets():
             layout = widgets.Layout(height = _height, width = _width_b))
         self.b_aT.on_click(self.inter_aT)
 
-        #Overwrite shift factors
+        # Overwrite shift factors
         self.cb_aT = widgets.Checkbox(
-            value=False, 
-            description='fit and overwrite provided shift factors',
+            value=False,
+            description="fit and overwrite provided shift factors",
             disabled=True,
-            indent = True,
-            layout = widgets.Layout(height = _height, width = _width),
-            style = {'description_width' : 'initial'})
+            indent=True,
+            layout=widgets.Layout(height=_height, width=_width),
+            style={"description_width": "initial"},
+        )
 
-        #Allow manual shifting of log_aT
+        # Allow manual shifting of log_aT
         self.cb_ManShift = widgets.Checkbox(
-            value=False, 
-            description='manually adjust shift factors',
+            value=False,
+            description="manually adjust shift factors",
             disabled=True,
-            indent = True,
-            layout = widgets.Layout(height = _height, width = _width),
-            style = {'description_width' : 'initial'})
+            indent=True,
+            layout=widgets.Layout(height=_height, width=_width),
+            style={"description_width": "initial"},
+        )
         self.cb_ManShift.observe(self.show_manual_shift, 'value')
 
-        #Show details of shift algorithm
+        # Show details of shift algorithm
         self.cb_DebugShift = widgets.Checkbox(
-            value=False, 
-            description='show details of shift algorithm',
+            value=False,
+            description="show details of shift algorithm",
             disabled=True,
-            indent = True,
-            layout = widgets.Layout(height = _height, width = _width),
-            style = {'description_width' : 'initial'})
+            indent=True,
+            layout=widgets.Layout(height=_height, width=_width),
+            style={"description_width": "initial"},
+        )
         self.cb_DebugShift.observe(self.show_shift_debug, 'value')
 
-        #Out shift factors
+        # Out shift factors
         self.out_aT = widgets.Output()
         self.out_aT_man = widgets.Output()
         self.out_aT_debug = widgets.Output()
 
-        #Layout
+        # Layout
         _aT = widgets.HBox([self.cb_aT, self.cb_ManShift, self.cb_DebugShift],
             layout = widgets.Layout(**_layout_around))
-        _aT_b = widgets.HBox([self.b_aT],  
-            layout = widgets.Layout(**_layout_around))
-        _aT_out = widgets.HBox([self.out_aT],  
-            layout = widgets.Layout(**_layout_around))
-        _aT_out_man = widgets.HBox([self.out_aT_man],  
-            layout = widgets.Layout(**_layout_around))
-        _aT_out_debug = widgets.HBox([self.out_aT_debug],  
-            layout = widgets.Layout(**_layout_around))
+        _aT_b = widgets.HBox([self.b_aT], layout=widgets.Layout(**_layout_around))
+        _aT_out = widgets.HBox([self.out_aT], layout=widgets.Layout(**_layout_around))
+        _aT_out_man = widgets.HBox([self.out_aT_man], layout=widgets.Layout(**_layout_around))
+        _aT_out_debug = widgets.HBox([self.out_aT_debug], layout=widgets.Layout(**_layout_around))
         self.w_aT = widgets.VBox([_aT, _aT_b, _aT_out, _aT_out_man, _aT_out_debug])
 
-
-        #Shift functions
-        #-----------------------------------------------------------------------
-        #Overwrite WLF shift function coefficients
+        # Shift functions
+        # -----------------------------------------------------------------------
+        # Overwrite WLF shift function coefficients
         self.cb_WLF = widgets.Checkbox(
-            value=False, 
-            description='fit and overwrite provided WLF',
+            value=False,
+            description="fit and overwrite provided WLF",
             disabled=True,
-            indent = True,
-            layout = widgets.Layout(height = _height, width = _width),
-            style = {'description_width' : 'initial'})
+            indent=True,
+            layout=widgets.Layout(height=_height, width=_width),
+            style={"description_width": "initial"},
+        )
 
-        #Fit and plot shift functions
+        # Fit and plot shift functions
         self.b_shift = widgets.Button(
             description='(fit) & plot shift functions',
             button_style='info',
@@ -382,14 +383,12 @@ class Widgets():
             layout = widgets.Layout(height = _height, width = _width_b))
         self.b_shift.on_click(self.inter_shift)
 
-        #Out shift function
+        # Out shift function
         self.out_shift = widgets.Output()
 
-        #Layout
-        _shift = widgets.HBox([self.cb_WLF], 
-            layout = widgets.Layout(**_layout_around))
-        _shift_b = widgets.HBox([self.b_shift],  
-            layout = widgets.Layout(**_layout_around))
+        # Layout
+        _shift = widgets.HBox([self.cb_WLF], layout=widgets.Layout(**_layout_around))
+        _shift_b = widgets.HBox([self.b_shift], layout=widgets.Layout(**_layout_around))
         self.w_shift = widgets.VBox([_shift, _shift_b, self.out_shift])
 
         """
@@ -397,47 +396,46 @@ class Widgets():
         Subsection - Estimate Prony series parameters
         ------------------------------------------------------------------------
         """
-        #Filter master curve
-        #-----------------------------------------------------------------------
-        #Smooth
+        # Filter master curve
+        # -----------------------------------------------------------------------
+        # Smooth
         self.b_smooth = widgets.Button(
             description='smooth master curve',
             button_style='info',
             layout = widgets.Layout(height = _height, width = _width_b))
         self.b_smooth.on_click(self.inter_smooth_fig)
 
-        #Out smooth
+        # Out smooth
         self.out_smooth = widgets.Output()
 
-        #Layout
-        _smooth_out = widgets.HBox([self.out_smooth],  
-            layout = widgets.Layout(**_layout_around))
-        _smooth_b = widgets.HBox([self.b_smooth],  
-            layout = widgets.Layout(**_layout_around))
+        # Layout
+        _smooth_out = widgets.HBox([self.out_smooth], layout=widgets.Layout(**_layout_around))
+        _smooth_b = widgets.HBox([self.b_smooth], layout=widgets.Layout(**_layout_around))
         self.w_smooth = widgets.VBox([_smooth_b, _smooth_out])
 
-
-        #Discretization
-        #-----------------------------------------------------------------------
-        #Discretization type
+        # Discretization
+        # -----------------------------------------------------------------------
+        # Discretization type
         self.rb_dis = widgets.RadioButtons(
-            options=['default', 'manual'],
-            value='default', 
-            description='Discretization:',
+            options=["default", "manual"],
+            value="default",
+            description="Discretization:",
             disabled=False,
-            style = {'description_width' : 'initial'},
-            layout = widgets.Layout(height = _height, width = _width))
+            style={"description_width": "initial"},
+            layout=widgets.Layout(height=_height, width=_width),
+        )
         self.rb_dis.observe(self.set_dis, 'value')
 
-        #Discretization window
+        # Discretization window
         self.rb_dis_win = widgets.RadioButtons(
-            options=['round', 'exact'],
-            value='round', 
-            description='Window:',
+            options=["round", "exact"],
+            value="round",
+            description="Window:",
             disabled=True,
-            layout = widgets.Layout(height = _height, width = _width))
+            layout=widgets.Layout(height=_height, width=_width),
+        )
 
-        #Discretization number of Prony terms
+        # Discretization number of Prony terms
         self.it_nprony = widgets.BoundedIntText(
             value=self.nprony,
             min = 0,
@@ -448,63 +446,62 @@ class Widgets():
             layout = widgets.Layout(height = _height, width = '220px'),
             style = {'description_width' : 'initial'})
 
-        #Plot discretization
+        # Plot discretization
         self.b_dis = widgets.Button(
-            description='plot discretization',
-            button_style='info', 
-            layout = widgets.Layout(height = _height, width = _width_b))
+            description="plot discretization",
+            button_style="info",
+            layout=widgets.Layout(height=_height, width=_width_b),
+        )
         self.b_dis.on_click(self.inter_dis)
 
-        #Out discretization
+        # Out discretization
         self.out_dis = widgets.Output()
 
-        #Layout
-        _dis = widgets.HBox([self.rb_dis, self.rb_dis_win, self.it_nprony],  
-            layout = widgets.Layout(**_layout))
-        _dis_b = widgets.HBox([self.b_dis],  
-            layout = widgets.Layout(**_layout_around))
+        # Layout
+        _dis = widgets.HBox(
+            [self.rb_dis, self.rb_dis_win, self.it_nprony], layout=widgets.Layout(**_layout)
+        )
+        _dis_b = widgets.HBox([self.b_dis], layout=widgets.Layout(**_layout_around))
         self.w_dis = widgets.VBox([_dis, _dis_b, self.out_dis])
 
-
-        #Fit Prony parameter
-        #-----------------------------------------------------------------------
-        #Prony fit
+        # Fit Prony parameter
+        # -----------------------------------------------------------------------
+        # Prony fit
         self.b_fit = widgets.Button(
             description='fit Prony series',
             button_style='info',
             layout = widgets.Layout(height = _height, width = _width_b))
         self.b_fit.on_click(self.inter_fit)
 
-        #Out Prony
+        # Out Prony
         self.out_fit = widgets.Output()
         self.out_prony = widgets.Output()
 
-        #Layout
-        _fit_b = widgets.HBox([self.b_fit],  
-            layout = widgets.Layout(**_layout_around))
-        _out_fit_prony = widgets.HBox([self.out_fit, self.out_prony],  
-            layout = widgets.Layout(**_layout_around)) 
+        # Layout
+        _fit_b = widgets.HBox([self.b_fit], layout=widgets.Layout(**_layout_around))
+        _out_fit_prony = widgets.HBox(
+            [self.out_fit, self.out_prony], layout=widgets.Layout(**_layout_around)
+        )
         self.w_out_fit_prony = widgets.VBox([_fit_b, _out_fit_prony])
 
-
-        #Generalized Maxwell model
-        #-----------------------------------------------------------------------
-        #Plot Generalized Maxwell
+        # Generalized Maxwell model
+        # -----------------------------------------------------------------------
+        # Plot Generalized Maxwell
         self.b_GMaxw = widgets.Button(
             description='plot Generalized Maxwell',
             button_style='info',
             layout = widgets.Layout(height = _height, width = _width_b))
         self.b_GMaxw.on_click(self.inter_GMaxw)
-        
-        #Out Generalized Maxwell
+
+        # Out Generalized Maxwell
         self.out_GMaxw_freq = widgets.Output()
         self.out_GMaxw_temp = widgets.Output()
 
-        #Layout
-        _GMaxw_b = widgets.HBox([self.b_GMaxw],  
-            layout = widgets.Layout(**_layout_around))
-        _out_GMaxw = widgets.HBox([self.out_GMaxw_freq, self.out_GMaxw_temp],  
-            layout = widgets.Layout(**_layout_around)) 
+        # Layout
+        _GMaxw_b = widgets.HBox([self.b_GMaxw], layout=widgets.Layout(**_layout_around))
+        _out_GMaxw = widgets.HBox(
+            [self.out_GMaxw_freq, self.out_GMaxw_temp], layout=widgets.Layout(**_layout_around)
+        )
         self.w_out_GMaxw = widgets.VBox([_GMaxw_b, _out_GMaxw])
 
         """
@@ -512,65 +509,56 @@ class Widgets():
         Subsection - Optional minimization routine
         ------------------------------------------------------------------------
         """
-        #Minimize number of Prony terms
+        # Minimize number of Prony terms
         self.b_opt = widgets.Button(
             description='minimize Prony terms',
             button_style='warning',
             layout = widgets.Layout(height = _height, width = _width_b))
         self.b_opt.on_click(self.inter_opt)
-        
-        #Out Minimization
+
+        # Out Minimization
         self.out_dro = widgets.Output()
         self.out_opt = widgets.Output()
         self.out_res = widgets.Output()
         self.out_par = widgets.Output()
 
-        #Layout
-        _opt_b = widgets.HBox([self.b_opt],  
-            layout = widgets.Layout(**_layout_around))
-        _opt_dro = widgets.HBox([self.out_dro],  
-            layout = widgets.Layout(**_layout_around))
-        _minProny = widgets.HBox([self.out_opt, self.out_res],  
-            layout = widgets.Layout(**_layout_around)) 
-        _opt_par = widgets.HBox([self.out_par],  
-            layout = widgets.Layout(**_layout_around))
-        self.w_out_fit_min = widgets.VBox([_opt_b, _opt_dro, 
-            _minProny, _opt_par])
-
+        # Layout
+        _opt_b = widgets.HBox([self.b_opt], layout=widgets.Layout(**_layout_around))
+        _opt_dro = widgets.HBox([self.out_dro], layout=widgets.Layout(**_layout_around))
+        _minProny = widgets.HBox(
+            [self.out_opt, self.out_res], layout=widgets.Layout(**_layout_around)
+        )
+        _opt_par = widgets.HBox([self.out_par], layout=widgets.Layout(**_layout_around))
+        self.w_out_fit_min = widgets.VBox([_opt_b, _opt_dro, _minProny, _opt_par])
 
         """
         ------------------------------------------------------------------------
         Subsections - Download & Reload
         ------------------------------------------------------------------------
         """
-        #Download zip
+        # Download zip
         self.db_zip = widgets.Button(
             description='Download zip',
             button_style='success',
             layout = widgets.Layout(height = _height, width = _width_b))
         self.db_zip.on_click(self.down_zip)
-        
-        #Reload notebook
+
+        # Reload notebook
         self.b_reload = widgets.Button(
             description='Clear notebook!',
             button_style='danger',
             layout = widgets.Layout(height = 'auto', width = _width_b))
-        self.b_reload.on_click(self.reload)           
- 
-        #Output widgets for HTML content
+        self.b_reload.on_click(self.reload)
+
+        # Output widgets for HTML content
         self.out_html = widgets.Output()
 
-        #Layout
-        _down_b = widgets.HBox([self.db_zip],  
-            layout = widgets.Layout(**_layout_around))
-        _down_out = widgets.HBox([self.out_html],  
-            layout = widgets.Layout(**_layout_around))
+        # Layout
+        _down_b = widgets.HBox([self.db_zip], layout=widgets.Layout(**_layout_around))
+        _down_out = widgets.HBox([self.out_html], layout=widgets.Layout(**_layout_around))
         self.w_out_down = widgets.VBox([_down_b, _down_out])
 
-        self.w_reload = widgets.HBox([self.b_reload],  
-            layout = widgets.Layout(**_layout_around))
-
-
+        self.w_reload = widgets.HBox([self.b_reload], layout=widgets.Layout(**_layout_around))
 
     """
     ----------------------------------------------------------------------------
@@ -578,39 +566,40 @@ class Widgets():
     ----------------------------------------------------------------------------
     """
     def show_shift_debug(self, change):
-        #Display optional section
+        # Display optional section
         with self.out_aT_debug:
             if change['new'] == True:
                 clear_output()
                 master.plot_shift_debug(self.dshift)
             else:
                 clear_output()
-    
-    
+
     def show_manual_shift(self, change):
         _layout = {'width' : '100%', 'justify_content' : 'space-between'}
 
-        #Step size
+        # Step size
         self.inp_step = widgets.Dropdown(
-            options=['coarse', 'medium', 'fine'], 
-            value = 'coarse',
-            description='Step size:',
+            options=["coarse", "medium", "fine"],
+            value="coarse",
+            description="Step size:",
             disabled=False,
-            layout = widgets.Layout(width = '200px'),
-            style = {'description_width' : 'initial'}) 
+            layout=widgets.Layout(width="200px"),
+            style={"description_width": "initial"},
+        )
         self.inp_step.observe(self.set_inp_step, 'value')
 
-        #Temperature
+        # Temperature
         self.inp_T = widgets.Dropdown(
-            options=self.df_aT['T'], 
-            value = self.df_aT['T'].iloc[0],
-            description='Temperature (\N{DEGREE SIGN}C):',
+            options=self.df_aT["T"],
+            value=self.df_aT["T"].iloc[0],
+            description="Temperature (\N{DEGREE SIGN}C):",
             disabled=False,
-            layout = widgets.Layout(width = '200px'),
-            style = {'description_width' : 'initial'})
+            layout=widgets.Layout(width="200px"),
+            style={"description_width": "initial"},
+        )
         self.inp_T.observe(self.set_inp_T, 'value')
 
-        #Shift factor
+        # Shift factor
         self.inp_aT = widgets.FloatText(
             step=0.5,
             value = self.get_aT(self.df_aT['T'].iloc[0]),
@@ -621,20 +610,21 @@ class Widgets():
             style = {'description_width' : 'initial'})
         self.inp_aT.observe(self.set_inp_aT, 'value')
 
-        #Shift single set
+        # Shift single set
         self.cb_single = widgets.Checkbox(
-            value=False, 
-            description='shift single set',
+            value=False,
+            description="shift single set",
             disabled=False,
-            indent = False,
-            layout = widgets.Layout(width = '200px'),
-            style = {'description_width' : 'initial'})
+            indent=False,
+            layout=widgets.Layout(width="200px"),
+            style={"description_width": "initial"},
+        )
 
-        #Layout
+        # Layout
         self.w_inp_man = widgets.HBox([self.inp_step, self.inp_T, self.inp_aT,
             self.cb_single], layout = widgets.Layout(**_layout))
 
-        #Display optional section
+        # Display optional section
         with self.out_aT_man:
             if change['new'] == True:
                 self.df_aT_ref = self.df_aT.copy()
@@ -661,16 +651,14 @@ class Control(Widgets):
         self.collect_files()
         self.create_loading_bar()
 
-        with open('./theory.html') as file:  
-            self.html_theory = file.read() 
-
+        with open("./theory.html") as file:
+            self.html_theory = file.read()
 
     def collect_files(self):
         """
         Create dictionary to collect output files.
         """
         self.files = {}
-
 
     def create_loading_bar(self):
         """
@@ -681,12 +669,11 @@ class Control(Widgets):
             img = f.read()
         self.w_loading = widgets.Image(value=img)
 
-
     def reset_notebook(self):
         """
         Reset notebook configuration and clear data.
         """
-        #Clear output widgets
+        # Clear output widgets
         with self.out_load_modul:
             clear_output()
         with self.out_load_shift:
@@ -720,7 +707,7 @@ class Control(Widgets):
         with self.out_par:
             clear_output()
 
-        #Set default widget configuration
+        # Set default widget configuration
         self.cb_ManShift.value = False
         self.cb_ManShift.disabled = True
         self.cb_DebugShift.value = False
@@ -735,7 +722,7 @@ class Control(Widgets):
         self.cb_WLF.disabled = True
         self.b_shift.disabled = True
 
-        #Clear data
+        # Clear data
         self.df_master = None
         self.df_raw = None
         self.df_dis = None
@@ -761,7 +748,7 @@ class Control(Widgets):
                     _out = self.out_load_modul
                 elif func.__name__ == 'inter_load_shift':
                     _out = self.out_load_shift
-                
+
                 func(self, *args)
 
             except KeyError as e:
@@ -769,8 +756,11 @@ class Control(Widgets):
                     _msg = 'Input file header not as expected, check conventions!'
                     print(f'{bcolors.FAIL}' + _msg + f'{bcolors.ENDC}')
                     _msg = '<-- missing or unkown!'
-                    print(str(e).replace('not found in axis', 
-                        f'{bcolors.FAIL}' + _msg + f'{bcolors.ENDC}'))
+                    print(
+                        str(e).replace(
+                            "not found in axis", f"{bcolors.FAIL}" + _msg + f"{bcolors.ENDC}"
+                        )
+                    )
             except ValueError as e:
                 with _out:
                     if str(e).split(',')[0] == 'Temperatures':
@@ -802,7 +792,7 @@ class Control(Widgets):
                     print(f'{type(e).__name__}: {e}')
                     print(tb)
         return wrap
-       
+
     """
     ----------------------------------------------------------------------------
     Section - Overview
@@ -822,8 +812,8 @@ class Control(Widgets):
     Subsection - Specify input and upload data
     ----------------------------------------------------------------------------
     """
-    #Modulus data 
-    #---------------------------------------------------------------------------
+    # Modulus data
+    # ---------------------------------------------------------------------------
     def set_domain(self, change):
         """
         Set measurement domain and update widgets.
@@ -836,7 +826,6 @@ class Control(Widgets):
             self.rb_instrument.value = 'user'
             self.rb_instrument.disabled = True
 
-
     def set_loading(self, change):
         """
         Set modulus based on loading direction and update widgets.
@@ -847,7 +836,6 @@ class Control(Widgets):
             self.modul = 'E'
         elif change['new'] == 'shear':
             self.modul = 'G'
-
 
     def set_instrument(self, change):
         """
@@ -860,7 +848,6 @@ class Control(Widgets):
         elif change ['new'] == 'user':
             self.up_inp.accept='.csv'
 
-
     def set_type(self, change):
         """
         Set type of modulus data and update widgets.
@@ -871,7 +858,6 @@ class Control(Widgets):
             self.b_aT.disabled = False
         else:
             self.b_aT.disabled = True
-
 
     @exceptions
     def inter_load_modul(self, b):
@@ -886,7 +872,7 @@ class Control(Widgets):
 
         self.reset_notebook()
 
-        #Load modulus
+        # Load modulus
         if self.rb_instrument.value == 'Eplexor':
             if self.rb_type.value == 'master':
                 _epl  = load.Eplexor_master(_upload, self.modul)
@@ -899,8 +885,7 @@ class Control(Widgets):
                 self.set_RefT(self.ft_RefT.value)
         elif self.rb_instrument.value == 'user':
             if self.rb_type.value == 'master':
-                _master = load.user_master(_upload, 
-                    self.rb_domain.value, self.RefT, self.modul)
+                _master = load.user_master(_upload, self.rb_domain.value, self.RefT, self.modul)
                 self.df_master, self.units = _master
                 self.set_RefT(0)
                 self.ft_RefT.disabled = False
@@ -909,32 +894,30 @@ class Control(Widgets):
                     _upload, self.rb_domain.value, self.modul)
                 self.set_RefT(self.ft_RefT.value)
 
-        #Add data to file package and update widgets
-        if isinstance(self.df_master, pd.DataFrame):             
+        # Add data to file package and update widgets
+        if isinstance(self.df_master, pd.DataFrame):
             self.files['df_master'] = out.to_csv(self.df_master, self.units)
             self.v_modulus.value = True
-        if isinstance(self.df_raw, pd.DataFrame):             
+        if isinstance(self.df_raw, pd.DataFrame):
             self.v_modulus.value = True
         if isinstance(self.df_aT, pd.DataFrame):
             self.files['df_aT'] = out.to_csv(self.df_aT, self.units)
             self.v_aT.value = True
             self.b_shift.disabled = False
-            if isinstance(self.df_raw, pd.DataFrame):   
+            if isinstance(self.df_raw, pd.DataFrame):
                 self.cb_aT.disabled = False
         if isinstance(self.df_WLF, pd.DataFrame):
-            self.files['df_shift_WLF_Eplexor'] = out.to_csv(self.df_WLF, 
-                self.units) 
+            self.files["df_shift_WLF_Eplexor"] = out.to_csv(self.df_WLF, self.units)
             self.v_WLF.value = True
             self.cb_WLF.disabled = False
 
-        #Indicate succesful upload
+        # Indicate succesful upload
         with self.out_load_modul:
             _msg = 'Upload successful!'
             print(f'{bcolors.OKGREEN}' + _msg + f'{bcolors.ENDC}')
 
-
-    #Shift factor data 
-    #---------------------------------------------------------------------------
+    # Shift factor data
+    # ---------------------------------------------------------------------------
     def set_shift(self, change):
         """
         Set wether user shift factors are provided and update widgets.
@@ -945,7 +928,6 @@ class Control(Widgets):
             self.up_shift.disabled = False
         else:
             self.up_shift.disabled = True
-
 
     @exceptions
     def inter_load_shift(self, b):
@@ -960,35 +942,33 @@ class Control(Widgets):
         with self.out_load_shift:
             clear_output()
 
-        #Load shift factors
+        # Load shift factors
         if self.cb_shift.value:
             self.df_aT = load.user_shift(_upload)
-            if isinstance(self.arr_RefT, pd.Series): 
+            if isinstance(self.arr_RefT, pd.Series):
                 _T_shift = self.df_aT['T'].sort_values(
                     ignore_index=True).to_numpy(dtype=float)
                 _T_modulus = self.arr_RefT.sort_values(
                     ignore_index=True).to_numpy(dtype=float)
                 if not all(_T_shift == _T_modulus):
                     self.df_aT = None
-                    raise ValueError('Temperatures,' + str(_T_modulus) 
-                        + ','+ str(_T_shift))
+                    raise ValueError("Temperatures," + str(_T_modulus) + "," + str(_T_shift))
 
-        #Add data to file package and update widgets
+        # Add data to file package and update widgets
         if isinstance(self.df_aT, pd.DataFrame):
             self.files['df_aT'] = out.to_csv(self.df_aT, self.units)
             self.v_aT.value = True
             self.b_shift.disabled = False
-            if isinstance(self.df_raw, pd.DataFrame):   
+            if isinstance(self.df_raw, pd.DataFrame):
                 self.cb_aT.disabled = False
 
-        #Indicate succesful upload
+        # Indicate succesful upload
         with self.out_load_shift:
             _msg = 'Upload successful!'
             print(f'{bcolors.OKGREEN}' + _msg + f'{bcolors.ENDC}')
 
-
-    #Reference temperature
-    #-----------------------------------------------------------------------
+    # Reference temperature
+    # -----------------------------------------------------------------------
     def set_RefT(self, change):
         """
         Set reference temperature and update widgets.
@@ -998,7 +978,7 @@ class Control(Widgets):
         else:
             _RefT = change
 
-        if isinstance(self.arr_RefT, pd.Series): 
+        if isinstance(self.arr_RefT, pd.Series):
             self.w_RefT.children = [self.dd_RefT]
             self.RefT = self.arr_RefT.iloc[(
                 self.arr_RefT - _RefT).abs().argsort()[:1]].values[0]
@@ -1008,14 +988,14 @@ class Control(Widgets):
             self.w_RefT.children = [self.ft_RefT]
             self.RefT = _RefT
             self.ft_RefT.value = self.RefT
-            
+
     """
     ----------------------------------------------------------------------------
     Subsection - Estimate Prony series parameters
     ----------------------------------------------------------------------------
     """
-    #Shift factors
-    #---------------------------------------------------------------------------
+    # Shift factors
+    # ---------------------------------------------------------------------------
     def inter_aT(self,b):
         """
         Execute interactive routine to fit shift factors.
@@ -1026,99 +1006,101 @@ class Control(Widgets):
         with self.out_aT:
             clear_output()
             display(self.w_loading)
-            #try:
-            #Fit shift factors if not present or overwrite
-            #if not isinstance(self.df_aT, pd.DataFrame) or self.cb_aT.value:
+            # try:
+            # Fit shift factors if not present or overwrite
+            # if not isinstance(self.df_aT, pd.DataFrame) or self.cb_aT.value:
             if not self.cb_shift.value:
                 self.df_aT, self.dshift = master.get_aT(self.df_raw, self.RefT)
             elif self.cb_aT.value:
                 self.df_aT, self.dshift = master.get_aT(self.df_raw, self.RefT)
 
-            #Assembly master curve
+            # Assembly master curve
             self.df_master = master.get_curve(self.df_raw, self.df_aT, self.RefT)
 
-            #Plot figure
+            # Plot figure
             clear_output()
             self.fig_master_shift, self.fig_master_shift_lax = master.plot_shift(
                 self.df_raw, self.df_master, self.units)
 
-            #Add data to file package 
+            # Add data to file package
             self.files['fig_master_shift'] = self.fig_master_shift
             self.files['df_master'] = out.to_csv(self.df_master, self.units)
             self.files['df_aT'] = out.to_csv(self.df_aT, self.units)
 
-            #Update widgets
+            # Update widgets
             self.b_shift.disabled = False
             self.cb_ManShift.disabled = False
             self.cb_DebugShift.disabled = False
             # except (NameError, AttributeError):
             #         print('Raw and/or master dataframes are missing!')
 
-
-    #Shift functions
-    #---------------------------------------------------------------------------
+    # Shift functions
+    # ---------------------------------------------------------------------------
     def inter_shift(self, b):
         """
         Execute interactive routine to obtaine shift functions.
         """
         with self.out_shift:
             clear_output()
-            #Fit WLF shift function if not present or overwrite
+            # Fit WLF shift function if not present or overwrite
             if not isinstance(self.df_WLF, pd.DataFrame) or self.cb_WLF.value:
                 self.df_WLF = shift.fit_WLF(self.df_master.RefT, self.df_aT)
 
-            #Fit Polynomial shift functions
+            # Fit Polynomial shift functions
             self.df_poly_C, self.df_poly_K = shift.fit_poly(self.df_aT)
 
-            #Plot figure
-            self.fig_shift, self.df_shift = shift.plot(self.df_aT, self.df_WLF, 
-                self.df_poly_C)
-            
-        #Add data to file package 
+            # Plot figure
+            self.fig_shift, self.df_shift = shift.plot(self.df_aT, self.df_WLF, self.df_poly_C)
+
+        # Add data to file package
         self.files['fig_shift'] = self.fig_shift
         self.files['df_shift_poly_Celsius'] = self.df_poly_C.to_csv()
         self.files['df_shift_poly_Kelvin'] = self.df_poly_K.to_csv()
         self.files['df_shift_WLF'] = out.to_csv(self.df_WLF, self.units)
-        #Optional figure data:
-        #self.files['df_shift_plot'] = out.to_csv(self.df_shift, self.units)
+        # Optional figure data:
+        # self.files['df_shift_plot'] = out.to_csv(self.df_shift, self.units)
 
-
-    #Smooth master curve
-    #---------------------------------------------------------------------------
+    # Smooth master curve
+    # ---------------------------------------------------------------------------
     def inter_smooth_fig(self, b):
         """
         Create interactive figure for smoothing routine.
         """
         with self.out_smooth:
             clear_output()
-            widgets.interact(self.inter_smooth, 
-                win=widgets.IntSlider(min=1, max=20, step=1, value=1, 
-                    description = 'Window size:',
-                    style = {'description_width' : 'initial'},
-                    layout = widgets.Layout(height = 'auto', width = '300px'),
-                    continuous_update=False))
-
+            widgets.interact(
+                self.inter_smooth,
+                win=widgets.IntSlider(
+                    min=1,
+                    max=20,
+                    step=1,
+                    value=1,
+                    description="Window size:",
+                    style={"description_width": "initial"},
+                    layout=widgets.Layout(height="auto", width="300px"),
+                    continuous_update=False,
+                ),
+            )
 
     def inter_smooth(self, win):
         """
         Execute the interactive smoothing routine of the master curve.
         """
         try:
-            #Smooth master curve
+            # Smooth master curve
             self.df_master = master.smooth(self.df_master, win)
 
-            #Plot figure
+            # Plot figure
             self.fig_smooth = master.plot_smooth(self.df_master, self.units)
-        
-            #Add data to file package 
+
+            # Add data to file package
             self.files['df_master'] = out.to_csv(self.df_master, self.units)
             self.files['fig_smooth'] = self.fig_smooth
         except AttributeError:
             print('Upload or create master curve!')
 
-
-    #Discretization
-    #---------------------------------------------------------------------------
+    # Discretization
+    # ---------------------------------------------------------------------------
     def set_dis(self, change):
         """
         Set discretization parameters and update widgets.
@@ -1132,7 +1114,6 @@ class Control(Widgets):
             self.rb_dis_win.disabled = False
             self.it_nprony.disabled = False
 
-
     def inter_dis(self, b):
         """
         Execute the interactive discretization routine.
@@ -1140,28 +1121,28 @@ class Control(Widgets):
         with self.out_dis:
             clear_output()
             try:
-                #Discretize
+                # Discretize
                 if self.rb_dis.value == 'default':
                     self.it_nprony.value = 0
-                self.df_dis = prony.discretize(self.df_master, 
-                    self.rb_dis_win.value, self.it_nprony.value)
+                self.df_dis = prony.discretize(
+                    self.df_master, self.rb_dis_win.value, self.it_nprony.value
+                )
 
-                #Plot figure 
+                # Plot figure
                 self.fig_dis = prony.plot_dis(self.df_master, self.df_dis, self.units)
 
-                #Update widget
+                # Update widget
                 self.it_nprony.value = self.df_dis.nprony
 
-                #Add data to file package 
+                # Add data to file package
                 self.files['df_dis'] = out.to_csv(self.df_dis, self.units,
                     index_label='i')
                 self.files['fig_dis'] = self.fig_dis
             except (AttributeError, KeyError):
-                  print('Smooth master curve before discretzation (win=1 -> no filter).')
-            
+                print("Smooth master curve before discretzation (win=1 -> no filter).")
 
-    #Fit Prony terms
-    #---------------------------------------------------------------------------
+    # Fit Prony terms
+    # ---------------------------------------------------------------------------
     def inter_fit(self, b):
         """
         Execute the interactive Prony parameter fitting routine.
@@ -1173,44 +1154,46 @@ class Control(Widgets):
                 clear_output()
                 display(self.w_loading)
 
-                #Perform curve fitting
-                self.prony, self.df_GMaxw = prony.fit(self.df_dis, self.df_master, 
-                                                      opt=False)
-            
-                #Plot figure
+                # Perform curve fitting
+                self.prony, self.df_GMaxw = prony.fit(self.df_dis, self.df_master, opt=False)
+
+                # Plot figure
                 clear_output()
                 self.fig_fit = prony.plot_fit(self.df_master, self.df_GMaxw, self.units)
                 self.files['fig_fit'] = self.fig_fit
                 self.files['df_GMaxw'] = out.to_csv(self.df_GMaxw, self.units)
-                self.files['df_prony'] = out.to_csv(self.prony['df_terms'], 
-                    self.units, index_label = 'i')
+                self.files["df_prony"] = out.to_csv(
+                    self.prony["df_terms"], self.units, index_label="i"
+                )
             except AttributeError:
                 clear_output()
                 print('Discretization of master curve is missing!')
                 return
 
         with self.out_prony:
-            #Plot Prony terms next to figure
+            # Plot Prony terms next to figure
             clear_output()
-            print('{}_0 = {:.2f} {}'.format(self.modul, 
-                self.prony['E_0'], self.units['{}_0'.format(self.modul)]))
+            print(
+                "{}_0 = {:.2f} {}".format(
+                    self.modul, self.prony["E_0"], self.units["{}_0".format(self.modul)]
+                )
+            )
             print(self.prony['df_terms'][['tau_i', 'alpha_i']])
 
-
-    #Calculate Generalized Maxwell model
-    #---------------------------------------------------------------------------
+    # Calculate Generalized Maxwell model
+    # ---------------------------------------------------------------------------
     def inter_GMaxw(self, b):
         """
         Execute interactive routine to calculate and plot the Generalized
-        Maxwell model. 
+        Maxwell model.
         """
         with self.out_GMaxw_freq:
             clear_output()
             try:
-                #Plot figure
+                # Plot figure
                 self.fig_GMaxw = prony.plot_GMaxw(self.df_GMaxw, self.units)
 
-                #Add data to file package
+                # Add data to file package
                 self.files['fig_GMaxw'] = self.fig_GMaxw
             except AttributeError:
                 print('Prony series parameters are missing!')
@@ -1219,43 +1202,44 @@ class Control(Widgets):
         with self.out_GMaxw_temp:
             clear_output()
             if isinstance(self.df_WLF, pd.DataFrame):
-                #Calculate temperature dependence
-                self.df_GMaxw_temp = prony.GMaxw_temp('WLF', self.df_GMaxw, 
-                    self.df_WLF, self.df_aT)
+                # Calculate temperature dependence
+                self.df_GMaxw_temp = prony.GMaxw_temp(
+                    "WLF", self.df_GMaxw, self.df_WLF, self.df_aT
+                )
 
-                #Plot figure
-                self.fig_GMaxw_temp = prony.plot_GMaxw_temp(self.df_GMaxw_temp, 
-                    self.units)
+                # Plot figure
+                self.fig_GMaxw_temp = prony.plot_GMaxw_temp(self.df_GMaxw_temp, self.units)
 
-                #Add data to file package
+                # Add data to file package
                 self.files['df_GMaxw_temp'] = out.to_csv(self.df_GMaxw_temp, self.units)
                 self.files['fig_GMaxw_temp'] = self.fig_GMaxw_temp
 
-
-    #Minimize number of Prony terms
-    #---------------------------------------------------------------------------
+    # Minimize number of Prony terms
+    # ---------------------------------------------------------------------------
     def inter_opt_fig(self, N):
         """
         Create interactive figure for optimization routine.
         """
         with self.out_opt:
             clear_output()
-            #Plot optimized model fit
-            self.df_GMaxw_opt, self.fig_opt = opt.plot_fit(self.df_master, 
-                self.dict_prony, N, self.units)
+            # Plot optimized model fit
+            self.df_GMaxw_opt, self.fig_opt = opt.plot_fit(
+                self.df_master, self.dict_prony, N, self.units
+            )
         with self.out_par:
             clear_output()
-            #Plot comparison of Prony parameters
-            self.fig_coeff = prony.plot_param([self.prony, 
-                self.dict_prony[N]], ['initial', 'minimized'])
+            # Plot comparison of Prony parameters
+            self.fig_coeff = prony.plot_param(
+                [self.prony, self.dict_prony[N]], ["initial", "minimized"]
+            )
 
-        #Add data to file package
-        self.files['df_prony_min'] = out.to_csv(self.dict_prony[N]['df_terms'], 
-            self.units, index_label = 'i')
+        # Add data to file package
+        self.files["df_prony_min"] = out.to_csv(
+            self.dict_prony[N]["df_terms"], self.units, index_label="i"
+        )
         self.files['df_GMaxw_min'] = out.to_csv(self.df_GMaxw_opt, self.units)
         self.files['fig_fit_min'] = self.fig_opt
         self.files['fig_coeff'] = self.fig_coeff
-        
 
     def inter_opt(self, b):
         """
@@ -1269,7 +1253,7 @@ class Control(Widgets):
             clear_output()
             try:
                 display(self.w_loading)
-                #Optimize number of Prony terms
+                # Optimize number of Prony terms
                 self.dict_prony, self.N_opt, self.N_opt_err = opt.nprony(
                     self.df_master, self.prony, window='min')
                 clear_output()
@@ -1279,35 +1263,37 @@ class Control(Widgets):
                 return
         with self.out_dro:
             clear_output()
-            #Create interactive Plot to change number of Prony terms
-            widgets.interact(self.inter_opt_fig, 
-                    N=widgets.Dropdown(
-                        options=self.dict_prony.keys(), 
-                        value=self.N_opt, 
-                        description = 'Number of Prony terms:',
-                        style = {'description_width' : 'initial'},
-                        layout = widgets.Layout(height = 'auto', width = '200px'),
-                        continuous_update=False))
+            # Create interactive Plot to change number of Prony terms
+            widgets.interact(
+                self.inter_opt_fig,
+                N=widgets.Dropdown(
+                    options=self.dict_prony.keys(),
+                    value=self.N_opt,
+                    description="Number of Prony terms:",
+                    style={"description_width": "initial"},
+                    layout=widgets.Layout(height="auto", width="200px"),
+                    continuous_update=False,
+                ),
+            )
         with self.out_res:
-            #Plot least squares residual
+            # Plot least squares residual
             self.fig_res = opt.plot_residual(self.N_opt_err)
 
-            #Add figure to file package
+            # Add figure to file package
             self.files['fig_res'] = self.fig_res
-
 
     """
     ----------------------------------------------------------------------------
     Subsections - Download & Clear
     ----------------------------------------------------------------------------
     """
-    
-    #Download zip
-    #---------------------------------------------------------------------------
+
+    # Download zip
+    # ---------------------------------------------------------------------------
     def trigger_download(self, data, filename, kind='text/json'):
         """
-        Trigger download through HTML output widget. 
-        
+        Trigger download through HTML output widget.
+
         Works in Jupyter notebook and voila.
 
         References
@@ -1328,7 +1314,6 @@ class Control(Widgets):
         with self.out_html:
             clear_output()
             display(HTML(f'<script>{js_code}</script>'))
-            
 
     def down_zip(self, b):
         """
@@ -1345,23 +1330,19 @@ class Control(Widgets):
             zip_b64 = generate_zip(self.files)
             self.trigger_download(zip_b64, 'fit.zip', kind='text/plain')
 
-
-    #Reload notebook
-    #---------------------------------------------------------------------------
+    # Reload notebook
+    # ---------------------------------------------------------------------------
     def reload(self,b):
         """
         Reload the webpage to clear all data and recreate class objects.
         """
         with self.out_html:
             clear_output()
-            display(HTML(
-                '''
+            display(HTML("""
                     <script>
                         window.location.reload();
-                    </script>            
-                '''
-            ))
-
+                    </script>
+                """))
 
     """
     ----------------------------------------------------------------------------
@@ -1398,7 +1379,7 @@ class Control(Widgets):
             self.inp_aT.disabled = True
         else:
             self.inp_aT.disabled = False
-        
+
     def set_inp_aT(self, change):
         """
         Manually modify shift factors and update master curve.
@@ -1407,10 +1388,10 @@ class Control(Widgets):
         idx0 = self.df_aT['T'][self.df_aT['T'] == self.RefT].index
         idx = self.df_aT['T'][self.df_aT['T'] == self.inp_T.value].index
         delta = change['new'] - self.df_aT['log_aT'].iloc[idx].values
-        
-        #Update shift factors based on user input
+
+        # Update shift factors based on user input
         if delta != 0.0:
-            if single:    
+            if single:
                 self.df_aT['log_aT'].iloc[idx] += delta
             else:
                 if idx < idx0:
@@ -1420,31 +1401,31 @@ class Control(Widgets):
                     for i in range(int(idx.values), self.df_aT['T'].shape[0]):
                         self.df_aT['log_aT'].iloc[i] += delta
 
-            #Update master curve
+            # Update master curve
             self.df_master = master.get_curve(self.df_raw, self.df_aT, self.RefT)
 
-            #Update figure
+            # Update figure
             self.fig_master_shift = master.plot_shift_update(
                 self.df_master, self.fig_master_shift, self.fig_master_shift_lax)
 
-            #Update data in file package
+            # Update data in file package
             self.files['df_master'] = out.to_csv(self.df_master, self.units)
             self.files['df_aT'] = out.to_csv(self.df_aT, self.units)
             self.files['fig_master_shift'] = self.fig_master_shift
-            
+
     def reset_df_aT(self):
         """
         Reset shift factors to initial state after manually modifying them.
         """
-        #Reset shift factors
+        # Reset shift factors
         self.df_aT = self.df_aT_ref.copy()
 
-        #Reset master curve
+        # Reset master curve
         self.df_master = master.get_curve(self.df_raw, self.df_aT, self.RefT)
 
-        #Reset figure
+        # Reset figure
         self.fig_master_shift = master.plot_shift_update(
             self.df_master, self.fig_master_shift, self.fig_master_shift_lax)
 
-        #Reset data in file package
+        # Reset data in file package
         self.files['fig_master_shift'] = self.fig_master_shift
