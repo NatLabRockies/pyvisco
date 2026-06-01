@@ -9,8 +9,8 @@ description = "Prony series identification for linear viscoelastic material mode
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "BSD-3-Clause" }
-authors = [{ name = "Martin Springer", email = "martin.springer@nrel.gov" }]
-maintainers = [{ name = "Martin Springer", email = "martin.springer@nrel.gov" }]
+authors = [{ name = "Martin Springer", email = "martin.springer@nlr.gov" }]
+maintainers = [{ name = "Martin Springer", email = "martin.springer@nlr.gov" }]
 keywords = ["curve-fitting", "material-modelling", "viscoelasticity", "prony"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -62,7 +62,7 @@ dev = [
 
 [project.urls]
 Documentation = "https://pyvisco.readthedocs.io/"
-"Source Code" = "https://github.com/NREL/pyvisco/"
+"Source Code" = "https://github.com/NatLabRockies/pyvisco/"
 
 [tool.setuptools.packages.find]
 include = ["pyvisco*"]
