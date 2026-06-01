@@ -4,11 +4,6 @@
 .. automodule:: pyvisco.load
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -26,15 +21,3 @@
       user_raw
       user_shift
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

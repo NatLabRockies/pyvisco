@@ -4,21 +4,12 @@
 .. automodule:: pyvisco.inter
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
    
       fig_bytes
       generate_zip
-   
-   
-
-   
    
    .. rubric:: Classes
 
@@ -27,11 +18,3 @@
       Control
       Widgets
    
-   
-
-   
-   
-   
-
-
-

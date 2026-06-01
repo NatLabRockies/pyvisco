@@ -34,8 +34,14 @@ extensions = [
     'sphinx.ext.extlinks',
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
-    'm2r2',
+    'myst_parser',
 ]
+
+# myst-parser: allow .md files to be picked up alongside .rst
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')

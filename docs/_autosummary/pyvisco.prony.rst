@@ -4,11 +4,6 @@
 .. automodule:: pyvisco.prony
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -29,15 +24,3 @@
       plot_param
       split_x0
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

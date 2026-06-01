@@ -4,11 +4,6 @@
 .. automodule:: pyvisco.verify
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@
       plot_fit_ANSYS
       prep_prony_ANSYS
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

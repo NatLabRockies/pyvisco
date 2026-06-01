@@ -4,11 +4,6 @@
 .. automodule:: pyvisco.master
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -19,21 +14,10 @@
       get_curve
       plot
       plot_shift
+      plot_shift_debug
       plot_shift_update
       plot_smooth
       pwr_x
       pwr_y
       smooth
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

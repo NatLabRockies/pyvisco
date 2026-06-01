@@ -4,11 +4,6 @@
 .. automodule:: pyvisco.opt
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -17,15 +12,3 @@
       plot_fit
       plot_residual
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-

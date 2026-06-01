@@ -4,11 +4,6 @@
 .. automodule:: pyvisco.shift
 
    
-   
-   
-
-   
-   
    .. rubric:: Functions
 
    .. autosummary::
@@ -22,15 +17,3 @@
       poly3
       poly4
    
-   
-
-   
-   
-   
-
-   
-   
-   
-
-
-
