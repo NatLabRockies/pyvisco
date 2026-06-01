@@ -16,6 +16,7 @@ Contents
 
    readme_link
    api
+   changelog/index
 
 
 Indices and tables
@@ -28,6 +29,7 @@ Indices and tables
 Dependencies
 ============
 
-pyvisco depends on the following packages:
-
-.. literalinclude:: ../requirements.txt
+Runtime and optional dependencies are declared in ``pyproject.toml`` under
+``[project] dependencies`` and ``[project.optional-dependencies]``. See the
+project page on `PyPI <https://pypi.org/project/pyvisco/>`_ or the source
+``pyproject.toml`` for the authoritative list.
