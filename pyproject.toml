@@ -39,9 +39,11 @@ interactive = [
     "ipympl>=0.9.3",
     "notebook>=7.1",
     "jupyterlab>=4.1",
+    "openpyxl>=3.1",
+    "xlrd>=2.0",
 ]
 app = ["voila>=0.5"]
-excel = ["openpyxl>=3.1"]
+excel = ["openpyxl>=3.1", "xlrd>=2.0"]
 test = [
     "pytest>=8.0",
     "pytest-cov>=5.0",
