@@ -33,7 +33,7 @@ There are three ways to use pyvisco:
 
 1. **Interactive web app (no install required).** The `LinViscoFit.ipynb` notebook provides a graphical interface (upload data → fit → download Prony series) and is rendered with voila on Binder:
 
-   [![badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NatLabRockies/pyvisco/HEAD?urlpath=voila%2Frender%2FLinViscoFit.ipynb)
+   [![badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NatLabRockies/pyvisco/main?urlpath=voila%2Frender%2FLinViscoFit.ipynb)
 
 2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
 
