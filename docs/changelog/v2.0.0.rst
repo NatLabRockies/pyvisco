@@ -16,14 +16,23 @@ Added
   - ``ci.yml`` — pytest matrix (Python 3.11 / 3.12 / 3.13 × Ubuntu /
     Windows) plus a ``ruff check`` + ``ruff format --check`` lint job.
   - ``notebooks.yml`` — strict ``nbval`` output comparison on the three
-    ``verification/verify_*.ipynb`` notebooks and an ``nbval-lax`` smoke
-    test on the ``LinViscoFit.ipynb`` voila GUI notebook.
+    ``verification/verify_*.ipynb`` notebooks, an ``nbval-lax`` smoke
+    test on the ``LinViscoFit.ipynb`` voila GUI notebook and on
+    ``tutorials/tutorial.ipynb``, and a smoke-test step that runs the
+    three ``tutorials/*.py`` example scripts.
   - ``binder.yml`` — weekly + on-push rebuild of the Binder image via
     ``jupyterhub/repo2docker-action``.
   - ``release-assets.yml`` — builds ``pyvisco-examples.zip`` from the
     contents of ``sample_data/`` and uploads it to every published GitHub
     release.
 
+- ``tutorials/`` folder with a non-interactive walkthrough notebook
+  (``tutorial.ipynb``, the ``ipywidgets``-free counterpart of
+  ``LinViscoFit.ipynb``) and three standalone scripts —
+  ``freq_master.py``, ``freq_raw.py``, ``time_master.py`` — mirroring
+  the three verification scenarios for headless / scripted use.
+- ``verification/README.md`` and ``tutorials/README.md`` describing the
+  contents and CI of each folder.
 - ``verification/nbval_sanitize.cfg`` to absorb harmless float / widget-id
   drift during notebook output comparison.
 - This changelog.
