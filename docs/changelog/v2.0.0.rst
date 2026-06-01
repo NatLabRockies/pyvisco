@@ -15,10 +15,10 @@ Added
 
   - ``ci.yml`` — pytest matrix (Python 3.11 / 3.12 / 3.13 × Ubuntu /
     Windows) plus a ``ruff check`` + ``ruff format --check`` lint job.
-  - ``notebooks.yml`` — strict ``nbval`` output comparison on the three
-    ``verification/verify_*.ipynb`` notebooks, an ``nbval-lax`` smoke
-    test on the ``LinViscoFit.ipynb`` voila GUI notebook and on
-    ``tutorials/tutorial.ipynb``, and a smoke-test step that runs the
+  - ``notebooks.yml`` — ``nbval-lax`` execution check on the three
+    ``verification/verify_*.ipynb`` notebooks, on
+    ``LinViscoFit.ipynb`` (voila GUI) and on
+    ``tutorials/tutorial.ipynb``, plus a smoke-test step that runs the
     three ``tutorials/*.py`` example scripts.
   - ``binder.yml`` — weekly + on-push rebuild of the Binder image via
     ``jupyterhub/repo2docker-action``.
@@ -33,8 +33,6 @@ Added
   the three verification scenarios for headless / scripted use.
 - ``verification/README.md`` and ``tutorials/README.md`` describing the
   contents and CI of each folder.
-- ``verification/nbval_sanitize.cfg`` to absorb harmless float / widget-id
-  drift during notebook output comparison.
 - This changelog.
 
 Changed
