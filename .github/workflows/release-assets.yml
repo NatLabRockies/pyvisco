@@ -1,0 +1,35 @@
+name: Release assets
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Tag of the existing release to attach the asset to (e.g. v2.0.0)
+        required: true
+
+jobs:
+  examples-zip:
+    name: Build and upload pyvisco-examples.zip
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # required to upload release assets
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build examples archive
+        run: |
+          cd examples
+          zip -r ../pyvisco-examples.zip \
+            *.csv *.xls README.md
+          cd ..
+          ls -lh pyvisco-examples.zip
+
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          gh release upload "$TAG" pyvisco-examples.zip --clobber \
+            --repo "${{ github.repository }}"
