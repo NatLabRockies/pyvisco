@@ -5,6 +5,8 @@ viscoelastic materials from measurements in either the time (relaxation tests)
 or frequency domain (DMTA).
 """
 
+from importlib.metadata import PackageNotFoundError, version
+
 from . import load
 from . import shift
 from . import master
@@ -12,7 +14,9 @@ from . import prony
 from . import opt
 from . import verify
 from . import out
-from . import _version
 
-__version__ = _version.get_versions()['version']
+try:
+    __version__ = version("pyvisco")
+except PackageNotFoundError:  # package not installed
+    __version__ = "0.0.0+unknown"
 
