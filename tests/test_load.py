@@ -1,4 +1,5 @@
 """Tests for the data loading utilities."""
+
 from __future__ import annotations
 
 from pyvisco import load

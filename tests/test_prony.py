@@ -1,4 +1,5 @@
 """Round-trip tests for the Prony series fitting pipeline."""
+
 from __future__ import annotations
 
 import numpy as np

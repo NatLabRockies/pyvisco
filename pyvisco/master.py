@@ -5,10 +5,9 @@ measurement data into a master curve and remove measurement outliers through
 smoothing of the master curve.
 """
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-
 from scipy.optimize import curve_fit
 
 """
@@ -16,6 +15,8 @@ from scipy.optimize import curve_fit
 Methods to shift raw data into master curve based on shift factors
 --------------------------------------------------------------------------------
 """
+
+
 def pwr_y(x, a, b, e):
     """
     Calculate the Power Law relation with a deviation term.
@@ -40,7 +41,7 @@ def pwr_y(x, a, b, e):
     -----
     Power Law relation: :math:`y = a x^b + e`
     """
-    return a*x**b+e
+    return a * x**b + e
 
 
 def pwr_x(y, a, b, e):
@@ -67,8 +68,8 @@ def pwr_x(y, a, b, e):
     -----
     Inverse Power Law relation: :math:`x=\left(\frac{y-e}{a}\right)^{\frac{1}{b}}`
     """
-    base = (y-e)/a
-    power = 1/b
+    base = (y - e) / a
+    power = 1 / b
     x = np.sign(base) * (np.abs(base)) ** (power)
     return x
 
@@ -97,7 +98,7 @@ def fit_pwr(xdata, ydata):
     scipy.optimize.curve_fit :  Non-linear least squares fit to a function.
     """
     bnd = ([-np.inf, -np.inf, -ydata.max()], [np.inf, np.inf, ydata.max()])
-    popt, pcov = curve_fit(pwr_y, xdata, ydata, bounds = bnd)
+    popt, pcov = curve_fit(pwr_y, xdata, ydata, bounds=bnd)
     return popt, pcov
 
 
@@ -137,16 +138,16 @@ def fit_at_pwr(df_raw, gb_ref, gb_shift):
     Power Law fit is used to calculate the shift factor.
     """
     modul = df_raw.modul
-    if df_raw.domain == 'freq':
-        _modul = '{}_stor'.format(modul)
-    elif df_raw.domain == 'time':
-        _modul = '{}_relax'.format(modul)
+    if df_raw.domain == "freq":
+        _modul = f"{modul}_stor"
+    elif df_raw.domain == "time":
+        _modul = f"{modul}_relax"
 
     # Get data for the reference set and the set to be shifted
-    gb = df_raw.groupby('Set')
-    ref_xdata   = gb.get_group(gb_ref)['f_set'].values
-    ref_ydata   = gb.get_group(gb_ref)[_modul].values
-    shift_xdata = gb.get_group(gb_shift)['f_set'].values
+    gb = df_raw.groupby("Set")
+    ref_xdata = gb.get_group(gb_ref)["f_set"].values
+    ref_ydata = gb.get_group(gb_ref)[_modul].values
+    shift_xdata = gb.get_group(gb_shift)["f_set"].values
     shift_ydata = gb.get_group(gb_shift)[_modul].values
 
     # Curve fit power law
@@ -181,41 +182,33 @@ def fit_at_pwr(df_raw, gb_ref, gb_shift):
     shift_ydata_fit = pwr_y(shift_xdata, *shift_popt)
 
     # Get interpolation or extrapolation range
-    if (ref_ydata_fit.max() > shift_ydata_fit.max() and
-        ref_ydata_fit.min() > shift_ydata_fit.min()):
+    if ref_ydata_fit.max() > shift_ydata_fit.max() and ref_ydata_fit.min() > shift_ydata_fit.min():
         # Ref is on top
-        top_xdata = ref_xdata
         top_ydata = ref_ydata_fit
         top_popt = ref_popt
-        bot_xdata = shift_xdata
         bot_ydata = shift_ydata_fit
         bot_popt = shift_popt
         sign = 1
-    elif(ref_ydata_fit.max() < shift_ydata_fit.max() and
-         ref_ydata_fit.min() < shift_ydata_fit.min()):
+    elif (
+        ref_ydata_fit.max() < shift_ydata_fit.max() and ref_ydata_fit.min() < shift_ydata_fit.min()
+    ):
         # Shift is on top
-        top_xdata = shift_xdata
         top_ydata = shift_ydata_fit
         top_popt = shift_popt
-        bot_xdata = ref_xdata
         bot_ydata = ref_ydata_fit
         bot_popt = ref_popt
         sign = -1
     else:
         # Ref and Shift are intersecting
         if ref_ydata_fit.max() > shift_ydata_fit.max():
-            top_xdata = shift_xdata
             top_ydata = shift_ydata_fit
             top_popt = shift_popt
-            bot_xdata = ref_xdata
             bot_ydata = ref_ydata_fit
             bot_popt = ref_popt
             sign = -1
         else:
-            top_xdata = ref_xdata
             top_ydata = ref_ydata_fit
             top_popt = ref_popt
-            bot_xdata = shift_xdata
             bot_ydata = shift_ydata_fit
             bot_popt = shift_popt
             sign = 1
@@ -237,7 +230,7 @@ def fit_at_pwr(df_raw, gb_ref, gb_shift):
     x_bot = pwr_x(y, *bot_popt)
 
     # Calculate shift factor
-    log_aT = sign * np.log10(x_top/x_bot).mean()
+    log_aT = sign * np.log10(x_top / x_bot).mean()
 
     # Collect data to debug shift algorithm
     dshift = {
@@ -293,31 +286,31 @@ def get_aT(df_raw, RefT):
     """
     # Create df_aT
     Temp = []
-    for i, df_set in df_raw.groupby('Set'):
-        T = df_set['T_round'].iloc[0]
+    for i, df_set in df_raw.groupby("Set"):
+        T = df_set["T_round"].iloc[0]
         Temp.append(T)
         if T == RefT:
             idx = i
-    df_aT = pd.DataFrame(Temp, columns=['T'])
+    df_aT = pd.DataFrame(Temp, columns=["T"])
     df_aT["log_aT"] = np.nan
 
     # Set shift factor at RefT
-    df_aT.loc[idx, 'log_aT'] = 0
+    df_aT.loc[idx, "log_aT"] = 0
 
     # Create debug data dictionary
-    dshift ={}
+    dshift = {}
 
     # Shift below RefT
     for i in range(idx, 0, -1):
         log_aT, shift = fit_at_pwr(df_raw, i, i - 1)
-        df_aT.loc[i-1, 'log_aT'] = log_aT + df_aT.loc[i, 'log_aT']
-        dshift[df_aT.loc[i-1, 'T']] = shift
+        df_aT.loc[i - 1, "log_aT"] = log_aT + df_aT.loc[i, "log_aT"]
+        dshift[df_aT.loc[i - 1, "T"]] = shift
 
     # Shift above RefT
-    for i in range(idx, df_aT.shape[0]-1, 1):
+    for i in range(idx, df_aT.shape[0] - 1, 1):
         log_aT, shift = fit_at_pwr(df_raw, i, i + 1)
-        df_aT.loc[i+1, 'log_aT'] = log_aT + df_aT.loc[i, 'log_aT']
-        dshift[df_aT.loc[i+1, 'T']] = shift
+        df_aT.loc[i + 1, "log_aT"] = log_aT + df_aT.loc[i, "log_aT"]
+        dshift[df_aT.loc[i + 1, "T"]] = shift
     return df_aT, dshift
 
 
@@ -350,37 +343,37 @@ def get_curve(df_raw, df_aT, RefT):
     master.get_aT : Returns df_aT.
     """
     modul = df_raw.modul
-    stor = '{}_stor'.format(modul)
-    loss = '{}_loss'.format(modul)
-    comp = '{}_comp'.format(modul)
-    relax = '{}_relax'.format(modul)
+    stor = f"{modul}_stor"
+    loss = f"{modul}_loss"
+    comp = f"{modul}_comp"
+    relax = f"{modul}_relax"
 
     df_shift = pd.DataFrame()
-    for S, df in df_raw.groupby("Set"):
-        aT = 10**(df_aT[df_aT['T'] == df['T_round'].iloc[0]]['log_aT'].values)
-        fshift = aT * df['f_set']
+    for _S, df in df_raw.groupby("Set"):
+        aT = 10 ** (df_aT[df_aT["T"] == df["T_round"].iloc[0]]["log_aT"].values)
+        fshift = aT * df["f_set"]
         df_shift = pd.concat([df_shift, fshift.to_frame()])
 
-    if df_raw.domain == 'freq':
+    if df_raw.domain == "freq":
         df_master = df_raw[[stor, loss, "Set"]].copy()
-        df_master['f'] = df_shift
+        df_master["f"] = df_shift
         if comp in df_raw:
             df_master[comp] = df_raw[comp]
-            df_master['tan_del'] = df_raw['tan_del']
-        df_master = df_master.sort_values(by=['f']).reset_index(drop=True)
+            df_master["tan_del"] = df_raw["tan_del"]
+        df_master = df_master.sort_values(by=["f"]).reset_index(drop=True)
         df_master.RefT = RefT
         df_master.domain = df_raw.domain
         df_master.modul = modul
-        df_master['omega'] = 2*np.pi*df_master['f']
+        df_master["omega"] = 2 * np.pi * df_master["f"]
         df_master["t"] = 1 / df_master["f"]
-    elif df_raw.domain == 'time':
+    elif df_raw.domain == "time":
         df_master = df_raw[[relax, "Set"]].copy()
-        df_master['t'] = 1/df_shift
-        df_master = df_master.sort_values(by=['t']).reset_index(drop=True)
+        df_master["t"] = 1 / df_shift
+        df_master = df_master.sort_values(by=["t"]).reset_index(drop=True)
         df_master.RefT = RefT
         df_master.domain = df_raw.domain
         df_master.modul = modul
-        df_master['f'] = 1/df_master['t']
+        df_master["f"] = 1 / df_master["t"]
         df_master["omega"] = 2 * np.pi * df_master["f"]
     return df_master
 
@@ -403,25 +396,25 @@ def plot(df_master, units):
         Domain dependent plot of master curve.
     """
     modul = df_master.modul
-    stor = '{}_stor'.format(modul)
-    loss = '{}_loss'.format(modul)
-    relax = '{}_relax'.format(modul)
+    stor = f"{modul}_stor"
+    loss = f"{modul}_loss"
+    relax = f"{modul}_relax"
 
-    if df_master.domain == 'freq':
-        fig, (ax1, ax2) = plt.subplots(1,2, figsize=(8,0.75*4))
-        ax1.set_xlabel('Frequency (Hz)')
-        ax1.set_ylabel('Storage modulus ({})'.format(units[stor]))
-        ax2.set_xlabel('Frequency (Hz)')
-        ax2.set_ylabel("Loss modulus ({})".format(units[stor]))
-        df_master.plot(x='f', y=[stor], ax=ax1, logx=True, logy=True)
-        df_master.plot(x='f', y=[loss], ax=ax2, logx=True, logy=True)
+    if df_master.domain == "freq":
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 0.75 * 4))
+        ax1.set_xlabel("Frequency (Hz)")
+        ax1.set_ylabel(f"Storage modulus ({units[stor]})")
+        ax2.set_xlabel("Frequency (Hz)")
+        ax2.set_ylabel(f"Loss modulus ({units[stor]})")
+        df_master.plot(x="f", y=[stor], ax=ax1, logx=True, logy=True)
+        df_master.plot(x="f", y=[loss], ax=ax2, logx=True, logy=True)
         fig.show()
         return fig
-    elif df_master.domain == 'time':
-        fig, ax1 = plt.subplots(figsize=(4,0.75*4))
-        df_master.plot(x='f', y=[relax], ax=ax1, logx=True, logy=True)
-        ax1.set_xlabel('Time ({})'.format(units['t']))
-        ax1.set_ylabel('Relaxation modulus ({})'.format(units[stor]))
+    elif df_master.domain == "time":
+        fig, ax1 = plt.subplots(figsize=(4, 0.75 * 4))
+        df_master.plot(x="f", y=[relax], ax=ax1, logx=True, logy=True)
+        ax1.set_xlabel("Time ({})".format(units["t"]))
+        ax1.set_ylabel(f"Relaxation modulus ({units[stor]})")
         fig.show()
         return fig
 
@@ -469,25 +462,25 @@ def plot_shift(df_raw, df_master, units):
     master.plot_shift_update : Updates figure data.
     """
     modul = df_raw.modul
-    stor = '{}_stor'.format(modul)
-    loss = '{}_loss'.format(modul)
-    relax = '{}_relax'.format(modul)
+    stor = f"{modul}_stor"
+    loss = f"{modul}_loss"
+    relax = f"{modul}_relax"
 
-    if df_master.domain == 'freq':
-        fig, (ax1, ax2) = plt.subplots(1,2, figsize=(8,0.75*4))
-        ax1.set_xlabel('Frequency (Hz)')
-        ax1.set_ylabel('Storage modulus ({})'.format(units[stor]))
-        ax2.set_xlabel('Frequency (Hz)')
-        ax2.set_ylabel("Loss modulus ({})".format(units[stor]))
+    if df_master.domain == "freq":
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 0.75 * 4))
+        ax1.set_xlabel("Frequency (Hz)")
+        ax1.set_ylabel(f"Storage modulus ({units[stor]})")
+        ax2.set_xlabel("Frequency (Hz)")
+        ax2.set_ylabel(f"Loss modulus ({units[stor]})")
 
-        gb_raw = df_raw.groupby('Set')
-        gb_master = df_master.groupby('Set')
-        colors1 = np.flip(plt.cm.Blues(np.linspace(0,1,int(gb_raw.ngroups*1.25))),axis=0)
-        colors2 = np.flip(plt.cm.Oranges(np.linspace(0,1,int(gb_raw.ngroups*1.25))),axis=0)
+        gb_raw = df_raw.groupby("Set")
+        gb_master = df_master.groupby("Set")
+        colors1 = np.flip(plt.cm.Blues(np.linspace(0, 1, int(gb_raw.ngroups * 1.25))), axis=0)
+        colors2 = np.flip(plt.cm.Oranges(np.linspace(0, 1, int(gb_raw.ngroups * 1.25))), axis=0)
 
         lax1 = []
         lax2 = []
-        for i, (group, df_set) in enumerate(gb_master):
+        for _i, (group, df_set) in enumerate(gb_master):
             (line1,) = ax1.loglog(
                 df_set["f"], df_set[stor], ls="", marker=".", color=colors1[int(group)]
             )
@@ -497,7 +490,7 @@ def plot_shift(df_raw, df_master, units):
             lax1.append(line1)
             lax2.append(line2)
         for i, (group, df_set) in enumerate(gb_raw):
-            if i in np.linspace(0, gb_raw.ngroups-1, num=5, dtype=int):
+            if i in np.linspace(0, gb_raw.ngroups - 1, num=5, dtype=int):
                 ax1.loglog(
                     df_set["f_set"],
                     df_set[stor],
@@ -523,8 +516,8 @@ def plot_shift(df_raw, df_master, units):
                 )
         ax = (ax1, lax1, ax2, lax2)
 
-        legend1 = ax1.legend(handlelength=1, handletextpad=0.1, fontsize=8)
-        legend2 = ax2.legend(handlelength=1, handletextpad=0.1, fontsize=8)
+        ax1.legend(handlelength=1, handletextpad=0.1, fontsize=8)
+        ax2.legend(handlelength=1, handletextpad=0.1, fontsize=8)
         # for legend_handle in legend1.legendHandles:
         #     legend_handle._legmarker.set_markersize(8)
         # for legend_handle in legend2.legendHandles:
@@ -532,23 +525,23 @@ def plot_shift(df_raw, df_master, units):
         fig.show()
         return fig, ax
 
-    elif df_master.domain == 'time':
-        fig, ax1 = plt.subplots(figsize=(4,0.75*4))
-        ax1.set_xlabel('Time (s)')
-        ax1.set_ylabel("Relaxation modulus ({})".format(units[relax]))
+    elif df_master.domain == "time":
+        fig, ax1 = plt.subplots(figsize=(4, 0.75 * 4))
+        ax1.set_xlabel("Time (s)")
+        ax1.set_ylabel(f"Relaxation modulus ({units[relax]})")
 
-        gb_raw = df_raw.groupby('Set')
-        gb_master = df_master.groupby('Set')
-        colors1 = np.flip(plt.cm.Blues(np.linspace(0,1,int(gb_raw.ngroups*1.25))), axis=0)
+        gb_raw = df_raw.groupby("Set")
+        gb_master = df_master.groupby("Set")
+        colors1 = np.flip(plt.cm.Blues(np.linspace(0, 1, int(gb_raw.ngroups * 1.25))), axis=0)
 
         lax1 = []
-        for i, (group, df_set) in enumerate(gb_master):
+        for _i, (group, df_set) in enumerate(gb_master):
             (line1,) = ax1.loglog(
                 df_set["t"], df_set[relax], ls="", marker=".", color=colors1[int(group)]
             )
             lax1.append(line1)
         for i, (group, df_set) in enumerate(gb_raw):
-            if i in np.linspace(0, gb_raw.ngroups-1, num=5, dtype=int):
+            if i in np.linspace(0, gb_raw.ngroups - 1, num=5, dtype=int):
                 ax1.loglog(
                     df_set["t_set"],
                     df_set[relax],
@@ -563,7 +556,7 @@ def plot_shift(df_raw, df_master, units):
                 )
         ax = (ax1, lax1)
 
-        legend = ax1.legend(handlelength=1, handletextpad=0.1, fontsize=8)
+        ax1.legend(handlelength=1, handletextpad=0.1, fontsize=8)
         # for legend_handle in legend.legendHandles:
         #     legend_handle._legmarker.set_markersize(8)
         fig.show()
@@ -604,17 +597,17 @@ def plot_shift_update(df_master, fig, ax):
     master.plot_shift : Creates figure that is updated with this function.
     """
     modul = df_master.modul
-    stor = '{}_stor'.format(modul)
-    loss = '{}_loss'.format(modul)
+    stor = f"{modul}_stor"
+    loss = f"{modul}_loss"
 
-    gb_master = df_master.groupby('Set')
+    gb_master = df_master.groupby("Set")
 
     if len(ax) == 2:
         ax1, lax1 = ax
     elif len(ax) == 4:
         ax1, lax1, ax2, lax2 = ax
 
-    for i, (group, df_set) in enumerate(gb_master):
+    for i, (_group, df_set) in enumerate(gb_master):
         line1 = lax1[i]
         line1.set_xdata(df_set["f"])
         line1.set_ydata(df_set[stor])
@@ -636,7 +629,9 @@ def plot_shift_update(df_master, fig, ax):
 Methods to smooth master curve and remove outliers
 --------------------------------------------------------------------------------
 """
-def smooth(df_master, win = 1):
+
+
+def smooth(df_master, win=1):
     """
     Remove outliers in measurement data by smoothing master curve.
 
@@ -657,17 +652,17 @@ def smooth(df_master, win = 1):
         Contains the master curve data, including the filtered arrays.
     """
     modul = df_master.modul
-    stor = '{}_stor'.format(modul)
-    loss = '{}_loss'.format(modul)
-    relax = '{}_relax'.format(modul)
-    stor_filt = '{}_stor_filt'.format(modul)
-    loss_filt = '{}_loss_filt'.format(modul)
-    relax_filt = '{}_relax_filt'.format(modul)
+    stor = f"{modul}_stor"
+    loss = f"{modul}_loss"
+    relax = f"{modul}_relax"
+    stor_filt = f"{modul}_stor_filt"
+    loss_filt = f"{modul}_loss_filt"
+    relax_filt = f"{modul}_relax_filt"
 
-    if df_master.domain == 'freq':
+    if df_master.domain == "freq":
         df_master[stor_filt] = df_master[stor].rolling(win, center=True, min_periods=1).median()
         df_master[loss_filt] = df_master[loss].rolling(win, center=True, min_periods=1).median()
-    elif df_master.domain == 'time':
+    elif df_master.domain == "time":
         df_master[relax_filt] = df_master[relax].rolling(win, center=True, min_periods=1).median()
     return df_master
 
@@ -690,19 +685,19 @@ def plot_smooth(df_master, units):
         Plot displaying the filtered and unfilterd master curve data.
     """
     modul = df_master.modul
-    stor = '{}_stor'.format(modul)
-    loss = '{}_loss'.format(modul)
-    relax = '{}_relax'.format(modul)
-    stor_filt = '{}_stor_filt'.format(modul)
-    loss_filt = '{}_loss_filt'.format(modul)
-    relax_filt = '{}_relax_filt'.format(modul)
+    stor = f"{modul}_stor"
+    loss = f"{modul}_loss"
+    relax = f"{modul}_relax"
+    stor_filt = f"{modul}_stor_filt"
+    loss_filt = f"{modul}_loss_filt"
+    relax_filt = f"{modul}_relax_filt"
 
-    if df_master.domain == 'freq':
-        fig, (ax1, ax2) = plt.subplots(1,2, figsize=(8,0.75*4))
+    if df_master.domain == "freq":
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 0.75 * 4))
         df_master.plot(
             x="f",
             y=[stor],
-            label=["{}'(raw)".format(modul)],
+            label=[f"{modul}'(raw)"],
             ax=ax1,
             logx=True,
             logy=True,
@@ -714,7 +709,7 @@ def plot_smooth(df_master, units):
         df_master.plot(
             x="f",
             y=[stor_filt],
-            label=["{}'(filter)".format(modul)],
+            label=[f"{modul}'(filter)"],
             ax=ax1,
             logx=True,
             logy=True,
@@ -723,7 +718,7 @@ def plot_smooth(df_master, units):
         df_master.plot(
             x="f",
             y=[loss],
-            label=["{}''(raw)".format(modul)],
+            label=[f"{modul}''(raw)"],
             ax=ax2,
             logx=True,
             logy=True,
@@ -735,22 +730,22 @@ def plot_smooth(df_master, units):
         df_master.plot(
             x="f",
             y=[loss_filt],
-            label=["{}''(filter)".format(modul)],
+            label=[f"{modul}''(filter)"],
             ax=ax2,
             logx=True,
             logy=True,
             color=["C1"],
         )
-        ax1.set_xlabel('Frequency (Hz)')
-        ax1.set_ylabel('Storage modulus ({})'.format(units[stor]))
-        ax2.set_xlabel('Frequency (Hz)')
-        ax2.set_ylabel("Loss modulus ({})".format(units[stor]))
+        ax1.set_xlabel("Frequency (Hz)")
+        ax1.set_ylabel(f"Storage modulus ({units[stor]})")
+        ax2.set_xlabel("Frequency (Hz)")
+        ax2.set_ylabel(f"Loss modulus ({units[stor]})")
         ax1.legend()
         ax2.legend()
         fig.show()
         return fig
-    elif df_master.domain == 'time':
-        fig, ax1 = plt.subplots(figsize=(4,0.75*4))
+    elif df_master.domain == "time":
+        fig, ax1 = plt.subplots(figsize=(4, 0.75 * 4))
         df_master.plot(
             x="t",
             y=[relax],
@@ -765,8 +760,8 @@ def plot_smooth(df_master, units):
         df_master.plot(
             x="t", y=[relax_filt], label=["filter"], ax=ax1, logx=True, logy=True, color=["r"]
         )
-        ax1.set_xlabel('Time ({})'.format(units['t']))
-        ax1.set_ylabel("Relaxation modulus ({})".format(units[relax]))
+        ax1.set_xlabel("Time ({})".format(units["t"]))
+        ax1.set_ylabel(f"Relaxation modulus ({units[relax]})")
         ax1.legend()
         fig.show()
         return fig
@@ -790,27 +785,79 @@ def plot_shift_debug(dshift):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 0.75 * 4))
 
         # Input data
-        ax1.loglog(shift['ref_xdata'], shift['ref_ydata_fit'], label='ref-fit', c='k', ls='--')
-        ax1.loglog(shift['shift_xdata'], shift['shift_ydata_fit'], label='shift-fit', c='gray', ls='--')
+        ax1.loglog(shift["ref_xdata"], shift["ref_ydata_fit"], label="ref-fit", c="k", ls="--")
+        ax1.loglog(
+            shift["shift_xdata"], shift["shift_ydata_fit"], label="shift-fit", c="gray", ls="--"
+        )
 
-        ax1.loglog(shift['ref_xdata'], shift['ref_ydata'], label='ref-data', c='k', ls='', marker='x', markersize=5)
-        ax1.loglog(shift['shift_xdata'], shift['shift_ydata'], label='shift-data', c='gray', ls='', marker='x', markersize=5)
+        ax1.loglog(
+            shift["ref_xdata"],
+            shift["ref_ydata"],
+            label="ref-data",
+            c="k",
+            ls="",
+            marker="x",
+            markersize=5,
+        )
+        ax1.loglog(
+            shift["shift_xdata"],
+            shift["shift_ydata"],
+            label="shift-data",
+            c="gray",
+            ls="",
+            marker="x",
+            markersize=5,
+        )
 
-        ax1.loglog(shift['x_bot'], shift['y'], label='bot dis', marker='o', c='firebrick', ls='', markersize=3)
-        ax1.loglog(shift['x_top'], shift['y'], label='top dis', marker='d', c='firebrick', ls='', markersize=3)
+        ax1.loglog(
+            shift["x_bot"],
+            shift["y"],
+            label="bot dis",
+            marker="o",
+            c="firebrick",
+            ls="",
+            markersize=3,
+        )
+        ax1.loglog(
+            shift["x_top"],
+            shift["y"],
+            label="top dis",
+            marker="d",
+            c="firebrick",
+            ls="",
+            markersize=3,
+        )
 
         # Shifted data
-        ax2.loglog(shift['ref_xdata'], shift['ref_ydata_fit'], label='ref-fit', c='k', ls='--')
-        ax2.loglog(shift['ref_xdata'], shift['ref_ydata'], label='ref-data', c='k', ls='', marker='x', markersize=5)
+        ax2.loglog(shift["ref_xdata"], shift["ref_ydata_fit"], label="ref-fit", c="k", ls="--")
+        ax2.loglog(
+            shift["ref_xdata"],
+            shift["ref_ydata"],
+            label="ref-data",
+            c="k",
+            ls="",
+            marker="x",
+            markersize=5,
+        )
 
-        ax2.loglog(shift['shifted_xdata'], shift['shift_ydata'], label='shift-data', c='gray', ls='', marker='x', markersize=5)
-        ax2.loglog(shift['shifted_xdata'], shift['shift_ydata_fit'], label='shift-fit', c='gray', ls='--')
+        ax2.loglog(
+            shift["shifted_xdata"],
+            shift["shift_ydata"],
+            label="shift-data",
+            c="gray",
+            ls="",
+            marker="x",
+            markersize=5,
+        )
+        ax2.loglog(
+            shift["shifted_xdata"], shift["shift_ydata_fit"], label="shift-fit", c="gray", ls="--"
+        )
 
         ax1.legend(fontsize=7)
         ax2.legend(fontsize=7)
-        fig.suptitle('Shift data set at T = {}°C'.format(T), fontsize=10)
-        ax1.set_title('measurement set', fontsize=8)
-        ax2.set_title('shifted set'.format(T), fontsize=8)
+        fig.suptitle(f"Shift data set at T = {T}°C", fontsize=10)
+        ax1.set_title("measurement set", fontsize=8)
+        ax2.set_title("shifted set", fontsize=8)
         fig.show()
 
         # First data point dropped?

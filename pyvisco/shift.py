@@ -4,11 +4,11 @@ principle to create a master curve from measurements performed at different
 temperatures.
 """
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-
 from scipy.optimize import curve_fit
+
 
 def WLF(Temp, RefT, WLF_C1, WLF_C2):
     """
@@ -35,11 +35,11 @@ def WLF(Temp, RefT, WLF_C1, WLF_C2):
     and Other Glass-forming Liquids". J. Amer. Chem. Soc. 77 (14): 3701-3707.
     doi:10.1021/ja01619a008
     """
-    log_aT = -WLF_C1*(Temp - RefT)/(WLF_C2+(Temp - RefT))
+    log_aT = -WLF_C1 * (Temp - RefT) / (WLF_C2 + (Temp - RefT))
     return log_aT
 
 
-def poly1(x,C0,C1):
+def poly1(x, C0, C1):
     """
     Calculate a polynomial function of degree 1 with a single variable 'x'.
 
@@ -55,10 +55,10 @@ def poly1(x,C0,C1):
     numeric
         Result of the polynomial function.
     """
-    return C0+C1*x
+    return C0 + C1 * x
 
 
-def poly2(x,C0,C1,C2):
+def poly2(x, C0, C1, C2):
     """
     Calculate a polynomial function of degree 2 with a single variable 'x'.
 
@@ -74,10 +74,10 @@ def poly2(x,C0,C1,C2):
     numeric
         Result of the polynomial function.
     """
-    return C0+C1*x+C2*x**2
+    return C0 + C1 * x + C2 * x**2
 
 
-def poly3(x,C0,C1,C2,C3):
+def poly3(x, C0, C1, C2, C3):
     """
     Calculate a polynomial function of degree 3 with a single variable 'x'.
 
@@ -93,10 +93,10 @@ def poly3(x,C0,C1,C2,C3):
     numeric
         Result of the polynomial function.
     """
-    return C0+C1*x+C2*x**2+C3*x**3
+    return C0 + C1 * x + C2 * x**2 + C3 * x**3
 
 
-def poly4(x,C0,C1,C2,C3,C4):
+def poly4(x, C0, C1, C2, C3, C4):
     """
     Calculate a polynomial function of degree 4 with a single variable 'x'.
 
@@ -112,7 +112,7 @@ def poly4(x,C0,C1,C2,C3,C4):
     numeric
         Result of the polynomial function.
     """
-    return C0+C1*x+C2*x**2+C3*x**3+C4*x**4
+    return C0 + C1 * x + C2 * x**2 + C3 * x**3 + C4 * x**4
 
 
 def fit_WLF(RefT, df_aT):
@@ -151,14 +151,15 @@ def fit_WLF(RefT, df_aT):
     and Other Glass-forming Liquids". J. Amer. Chem. Soc. 77 (14): 3701-3707.
     doi:10.1021/ja01619a008
     """
-    xdata = df_aT['T'].values
-    ydata = df_aT['log_aT'].values
+    xdata = df_aT["T"].values
+    ydata = df_aT["log_aT"].values
 
-    popt, _pcov = curve_fit(lambda x, C1, C2: WLF(x, RefT, C1, C2),
-        xdata, ydata, p0 = [1E3, 5E3], bounds=(0, 5000))
+    popt, _pcov = curve_fit(
+        lambda x, C1, C2: WLF(x, RefT, C1, C2), xdata, ydata, p0=[1e3, 5e3], bounds=(0, 5000)
+    )
 
     df = pd.DataFrame(data=np.insert(popt, 0, RefT)).T
-    df.columns = ['RefT', 'C1', 'C2']
+    df.columns = ["RefT", "C1", "C2"]
     return df
 
 
@@ -201,13 +202,13 @@ def fit_poly(df_aT):
         dtype=float,
     )
 
-    xdata = df_aT['T'].values+273.15
-    ydata = df_aT['log_aT'].values
+    xdata = df_aT["T"].values + 273.15
+    ydata = df_aT["log_aT"].values
 
-    df_K.loc[['C0', 'C1', 'C2', 'C3', 'C4'], 'D4'], _pcov = curve_fit(poly4, xdata, ydata)
-    df_K.loc[['C0', 'C1', 'C2', 'C3'], 'D3'], _pcov = curve_fit(poly3, xdata, ydata)
-    df_K.loc[['C0', 'C1', 'C2'], 'D2'], _pcov = curve_fit(poly2, xdata, ydata)
-    df_K.loc[['C0', 'C1'], 'D1'], _pcov = curve_fit(poly1, xdata, ydata)
+    df_K.loc[["C0", "C1", "C2", "C3", "C4"], "D4"], _pcov = curve_fit(poly4, xdata, ydata)
+    df_K.loc[["C0", "C1", "C2", "C3"], "D3"], _pcov = curve_fit(poly3, xdata, ydata)
+    df_K.loc[["C0", "C1", "C2"], "D2"], _pcov = curve_fit(poly2, xdata, ydata)
+    df_K.loc[["C0", "C1"], "D1"], _pcov = curve_fit(poly1, xdata, ydata)
 
     # Celsius
     df_C = pd.DataFrame(
@@ -217,13 +218,13 @@ def fit_poly(df_aT):
         dtype=float,
     )
 
-    xdata = df_aT['T'].values
-    ydata = df_aT['log_aT'].values
+    xdata = df_aT["T"].values
+    ydata = df_aT["log_aT"].values
 
-    df_C.loc[['C0', 'C1', 'C2', 'C3', 'C4'], 'D4'], _pcov = curve_fit(poly4, xdata, ydata)
-    df_C.loc[['C0', 'C1', 'C2', 'C3'], 'D3'], _pcov = curve_fit(poly3, xdata, ydata)
-    df_C.loc[['C0', 'C1', 'C2'], 'D2'], _pcov = curve_fit(poly2, xdata, ydata)
-    df_C.loc[['C0', 'C1'], 'D1'], _pcov = curve_fit(poly1, xdata, ydata)
+    df_C.loc[["C0", "C1", "C2", "C3", "C4"], "D4"], _pcov = curve_fit(poly4, xdata, ydata)
+    df_C.loc[["C0", "C1", "C2", "C3"], "D3"], _pcov = curve_fit(poly3, xdata, ydata)
+    df_C.loc[["C0", "C1", "C2"], "D2"], _pcov = curve_fit(poly2, xdata, ydata)
+    df_C.loc[["C0", "C1"], "D1"], _pcov = curve_fit(poly1, xdata, ydata)
 
     # Prep dataframes and add units for output
     df_C = df_C.T
@@ -231,11 +232,11 @@ def fit_poly(df_aT):
 
     coeff_C = df_C.columns.get_level_values(0)
     C = ["-", "°C^-1", "°C^-2", "°C^-3", "°C^-4"]
-    df_C.columns = pd.MultiIndex.from_tuples(zip(coeff_C, C), names=["Degree", "-"])
+    df_C.columns = pd.MultiIndex.from_tuples(zip(coeff_C, C, strict=False), names=["Degree", "-"])
 
     coeff_K = df_K.columns.get_level_values(0)
     K = ["-", "K^-1", "K^-2", "K^-3", "K^-4"]
-    df_K.columns = pd.MultiIndex.from_tuples(zip(coeff_K, K), names=["Degree", "-"])
+    df_K.columns = pd.MultiIndex.from_tuples(zip(coeff_K, K, strict=False), names=["Degree", "-"])
 
     return df_C, df_K
 
@@ -266,28 +267,28 @@ def plot(df_aT, df_WLF, df_C):
     df_shift: pandasDataFrame
         Contains the data used to create the plot.
     """
-    x = df_aT['T'].values
-    y_aT = df_aT['log_aT'].values
+    x = df_aT["T"].values
+    y_aT = df_aT["log_aT"].values
 
-    y_WLF = WLF(df_aT['T'], df_WLF['RefT'].values, df_WLF['C1'].values, df_WLF['C2'].values)
+    y_WLF = WLF(df_aT["T"], df_WLF["RefT"].values, df_WLF["C1"].values, df_WLF["C2"].values)
 
     df_p = df_C.copy()
     df_p.columns = df_C.columns.droplevel(1)
     df_p = df_p.T
-    y_poly4 = poly4(df_aT['T'], *df_p['D4'])
-    y_poly3 = poly3(df_aT['T'], *df_p['D3'][0:4])
-    y_poly2 = poly2(df_aT['T'], *df_p['D2'][0:3])
-    y_poly1 = poly1(df_aT['T'], *df_p['D1'][0:2])
+    y_poly4 = poly4(df_aT["T"], *df_p["D4"])
+    y_poly3 = poly3(df_aT["T"], *df_p["D3"][0:4])
+    y_poly2 = poly2(df_aT["T"], *df_p["D2"][0:3])
+    y_poly1 = poly1(df_aT["T"], *df_p["D1"][0:2])
 
     fig, ax = plt.subplots()
-    ax.plot(x, y_aT, ls='', marker='o', c='r', label='Shift factors',zorder=10)
-    ax.plot(x, y_WLF, c='k', label='WLF', ls='-')
-    ax.plot(x, y_poly4, label='D4 polynomial', c='0.2', ls='--')
-    ax.plot(x, y_poly3, label='D3 polynomial', c='0.4', ls=':')
-    ax.plot(x, y_poly2, label='D2 polynomial', c='0.6', ls='-.')
-    ax.plot(x, y_poly1, label='D1 polynomial', c='0.8', ls='-')
-    ax.set_xlabel('Temperature (°C)')
-    ax.set_ylabel(r'$\log(a_{\mathrm{T}})$')
+    ax.plot(x, y_aT, ls="", marker="o", c="r", label="Shift factors", zorder=10)
+    ax.plot(x, y_WLF, c="k", label="WLF", ls="-")
+    ax.plot(x, y_poly4, label="D4 polynomial", c="0.2", ls="--")
+    ax.plot(x, y_poly3, label="D3 polynomial", c="0.4", ls=":")
+    ax.plot(x, y_poly2, label="D2 polynomial", c="0.6", ls="-.")
+    ax.plot(x, y_poly1, label="D1 polynomial", c="0.8", ls="-")
+    ax.set_xlabel("Temperature (°C)")
+    ax.set_ylabel(r"$\log(a_{\mathrm{T}})$")
     ax.legend()
     fig.show()
 
@@ -296,11 +297,11 @@ def plot(df_aT, df_WLF, df_C):
         np.zeros((x.shape[0], 7)),
         columns=(["T", "log_aT", "WLF", "Poly1", "Poly2", "Poly3", "Poly4"]),
     )
-    df_shift['T'] = x
-    df_shift['log_aT'] = y_aT
-    df_shift['WLF'] = y_WLF
-    df_shift['Poly1'] = y_poly1
-    df_shift['Poly2'] = y_poly2
-    df_shift['Poly3'] = y_poly3
-    df_shift['Poly4'] = y_poly4
+    df_shift["T"] = x
+    df_shift["log_aT"] = y_aT
+    df_shift["WLF"] = y_WLF
+    df_shift["Poly1"] = y_poly1
+    df_shift["Poly2"] = y_poly2
+    df_shift["Poly3"] = y_poly3
+    df_shift["Poly4"] = y_poly4
     return fig, df_shift

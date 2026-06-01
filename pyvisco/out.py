@@ -4,6 +4,7 @@ Collection of functions to write pandas dataframes to files or buffer.
 
 import pandas as pd
 
+
 def add_units(df, units, index_label=None):
     """
     Add second row units header to pandas dataframe containing.
@@ -16,7 +17,7 @@ def add_units(df, units, index_label=None):
     df : pandas.DataFrame
         Units will be added to this dataframe.
     units : dict of {str : str}
-        Contains the names of the physical quantities as key and 
+        Contains the names of the physical quantities as key and
         the corresponding names of the units as item.
     index_label : str
         If index_label is specified, a name for the row index will be included
@@ -32,11 +33,12 @@ def add_units(df, units, index_label=None):
     out.to_csv : Parent function of current function.
     """
     variables = df.columns.get_level_values(0)
-    if index_label == None:
-        idx = pd.MultiIndex.from_tuples(zip(variables, [units[q] for q in variables]))
+    if index_label is None:
+        idx = pd.MultiIndex.from_tuples(zip(variables, [units[q] for q in variables], strict=False))
     else:
-        idx = pd.MultiIndex.from_tuples(zip(variables, [units[q] for q in variables]),
-            names = [index_label, '-'])
+        idx = pd.MultiIndex.from_tuples(
+            zip(variables, [units[q] for q in variables], strict=False), names=[index_label, "-"]
+        )
 
     df_out = df.copy()
     df_out.columns = idx
@@ -57,7 +59,7 @@ def to_csv(df, units, index_label=None, filepath=None):
     df : pandas.DataFrame
         Dataframe to be written to csv file.
     units : dict of {str : str}
-        Contains the names of the physical quantities as key and 
+        Contains the names of the physical quantities as key and
         the corresponding names of the units as item.
     index_label : str
         If index_label is specified, a name for the row index will be included
@@ -69,15 +71,15 @@ def to_csv(df, units, index_label=None, filepath=None):
     -------
     pandas.DataFrame
         If filepath is specified the dataframe will be written to a csv file.
-        If filepath is not specified, the function returns a bytes object 
+        If filepath is not specified, the function returns a bytes object
         containing the csv file data.
-    """    
+    """
     df = add_units(df, units, index_label)
-    if index_label == None:
+    if index_label is None:
         index = False
     else:
         index = True
-    if filepath == None:
-        return df.to_csv(index = index)
+    if filepath is None:
+        return df.to_csv(index=index)
     else:
-        df.to_csv(filepath, index = index)
+        df.to_csv(filepath, index=index)

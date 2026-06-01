@@ -1,12 +1,12 @@
 """Shared pytest fixtures."""
+
 from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 # Use a non-interactive matplotlib backend so plotting code never opens a window
 import matplotlib
+import pytest
 
 matplotlib.use("Agg")
 

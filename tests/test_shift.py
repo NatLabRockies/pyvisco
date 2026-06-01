@@ -1,4 +1,5 @@
 """Tests for the WLF / polynomial shift-factor functions."""
+
 from __future__ import annotations
 
 import numpy as np

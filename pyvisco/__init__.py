@@ -7,13 +7,9 @@ or frequency domain (DMTA).
 
 from importlib.metadata import PackageNotFoundError, version
 
-from . import load
-from . import shift
-from . import master
-from . import prony
-from . import opt
-from . import verify
-from . import out
+from . import load, master, opt, out, prony, shift, verify
+
+__all__ = ["load", "master", "opt", "out", "prony", "shift", "verify", "__version__"]
 
 try:
     __version__ = version("pyvisco")
