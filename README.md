@@ -1,8 +1,16 @@
 # pyvisco
 
+[![CI](https://github.com/NatLabRockies/pyvisco/actions/workflows/ci.yml/badge.svg)](https://github.com/NatLabRockies/pyvisco/actions/workflows/ci.yml)
+[![Notebooks](https://github.com/NatLabRockies/pyvisco/actions/workflows/notebooks.yml/badge.svg)](https://github.com/NatLabRockies/pyvisco/actions/workflows/notebooks.yml)
+[![Documentation Status](https://readthedocs.org/projects/pyvisco/badge/?version=latest)](https://pyvisco.readthedocs.io/en/latest/?badge=latest)
+[![PyPI](https://img.shields.io/pypi/v/pyvisco.svg)](https://pypi.org/project/pyvisco/)
+[![Python](https://img.shields.io/pypi/pyversions/pyvisco.svg)](https://pypi.org/project/pyvisco/)
+[![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699)
+
 Pyvisco is a Python library that supports the identification of Prony series parameters for Generalized Maxwell models describing linear viscoelastic materials.
 
 ## Overview
+
 The mechanical response of linear viscoelastic materials is often described with Generalized Maxwell models. The necessary material model parameters are typically identified by fitting a Prony series to the experimental measurement data in either the frequency-domain (via Dynamic Mechanical Thermal Analysis) or time-domain (via relaxation measurements). Pyvisco performs the necessary data processing of the experimental measurements, mathematical operations, and curve-fitting routines to identify the Prony series parameters. The experimental data can be provided as raw measurement sets at different temperatures or as pre-processed master curves.
 
 * If raw measurement data are provided, the time-temperature superposition principle is applied to create a master curve and obtain the shift functions prior to the Prony series parameters identification.
@@ -11,40 +19,55 @@ The mechanical response of linear viscoelastic materials is often described with
 
 An optional minimization routine is provided to reduce the number of Prony elements. This routine is helpful for Finite Element simulations where reducing the computational complexity of the linear viscoelastic material models can shorten the simulation time.
 
-## Usage
-The easiest way of using pyvisco is through an interactive Jupyter notebook that provides a graphical user interface to upload the experimental data, perform the curve fitting procedure, and download the obtained Prony series parameters. Currently, the Jupyter notebook is rendered with voila and can be accessed through binder. Click the link below to start the web application.
+## Installation
 
-[![badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NatLabRockies/pyvisco/HEAD?urlpath=voila%2Frender%2FLinViscoFit.ipynb)
-
-
-Alternatively, pyvisco can be installed automatically into Python from PyPI using the command line:
-```
+```bash
 pip install pyvisco
 ```
 
-A full API documentation is available at: [![Documentation Status](https://readthedocs.org/projects/pyvisco/badge/?version=latest)](https://pyvisco.readthedocs.io/en/latest/?badge=latest)
-Additionally, the [verification subfolder](https://github.com/NatLabRockies/pyvisco/tree/main/verification) contains example Jupyter notebooks on how to use the library.
+Requires Python 3.11 or newer.
+
+## Usage
+
+There are three ways to use pyvisco:
+
+1. **Interactive web app (no install required).** The `LinViscoFit.ipynb` notebook provides a graphical interface (upload data → fit → download Prony series) and is rendered with voila on Binder:
+
+   [![badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NatLabRockies/pyvisco/HEAD?urlpath=voila%2Frender%2FLinViscoFit.ipynb)
+
+2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
+
+3. **As a library.** Import `pyvisco` and call the modules directly. See the [API documentation](https://pyvisco.readthedocs.io/en/latest/) for details.
+
+Bundled example input files live under [`sample_data/`](sample_data/) and are also published as a downloadable archive on every GitHub release: [`pyvisco-examples.zip`](https://github.com/NatLabRockies/pyvisco/releases/latest/download/pyvisco-examples.zip).
 
 ## Verification
-The Python implementation was verified by comparing the obtained Prony series parameters with the curve fitting routine implemented in the commercial software package ANSYS APDL 2020 R1. Jupyter notebooks showcasing the comparison and supplementary files can be found in the [verification subfolder](https://github.com/NatLabRockies/pyvisco/tree/main/verification).
+
+The Python implementation is verified against the curve-fitting routine of the commercial package ANSYS APDL 2021 R1. The notebooks and reference material cards live in the [`verification/`](verification/) folder and are executed end-to-end on every push.
 
 ## Citation
-If you are using pyvisco in your published work, please use the following along with the version number and the specific DOI coresponding to that version from Zenodo: [![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699).
 
+If you use pyvisco in your published work, please cite it along with the version number and the specific DOI for that version on Zenodo: [![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699).
 
 ### APA
+
 ```
 Springer, Martin (2022). PYVISCO: A Python library for identifying Prony series parameters of linear viscoelastic materials (Version {insert version}) [Computer software]. doi:{insert DOI}
 ```
 
 ### BibTeX
-```
+
+```bibtex
 @software{Springer_pyvisco_2022,
-  author = {Springer, Martin},
-  doi = {insert DOI},
-  title = {{PYVISCO: A Python library for identifying Prony series parameters of linear viscoelastic materials}},
-  url = {https://github.com/NatLabRockies/pyvisco},
+  author  = {Springer, Martin},
+  doi     = {insert DOI},
+  title   = {{PYVISCO: A Python library for identifying Prony series parameters of linear viscoelastic materials}},
+  url     = {https://github.com/NatLabRockies/pyvisco},
   version = {insert version},
-  year = {2022}
+  year    = {2022}
 }
 ```
+
+## License
+
+Released under the [CLA 1.0](LICENSE) license.
