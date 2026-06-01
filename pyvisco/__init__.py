@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-"""Collection of submodules to identify Prony series parameters of linear 
-viscoelastic materials from measurements in either the time (relaxation tests) 
+"""Collection of submodules to identify Prony series parameters of linear
+viscoelastic materials from measurements in either the time (relaxation tests)
 or frequency domain (DMTA).
 """
 
@@ -19,4 +19,3 @@ try:
     __version__ = version("pyvisco")
 except PackageNotFoundError:  # package not installed
     __version__ = "0.0.0+unknown"
-
