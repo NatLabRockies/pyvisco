@@ -1,0 +1,49 @@
+name: Notebooks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pyvisco/**'
+      - 'verification/**.ipynb'
+      - 'pyproject.toml'
+      - '.github/workflows/notebooks.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'pyvisco/**'
+      - 'verification/**.ipynb'
+      - 'pyproject.toml'
+      - '.github/workflows/notebooks.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  execute:
+    name: execute verify_*.ipynb
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # for setuptools-scm
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package with interactive extras
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[test]" nbclient
+
+      - name: Execute verification notebooks
+        run: |
+          for nb in verification/verify_*.ipynb; do
+            echo "::group::Executing $nb"
+            jupyter execute --kernel_name=python3 "$nb"
+            echo "::endgroup::"
+          done
