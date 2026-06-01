@@ -204,10 +204,10 @@ def fit_poly(df_aT):
     xdata = df_aT['T'].values+273.15
     ydata = df_aT['log_aT'].values
 
-    df_K['D4'][['C0', 'C1', 'C2', 'C3', 'C4']], _pcov = curve_fit(poly4, xdata, ydata)
-    df_K['D3'][['C0', 'C1', 'C2', 'C3']], _pcov = curve_fit(poly3, xdata, ydata)
-    df_K['D2'][['C0', 'C1', 'C2']], _pcov = curve_fit(poly2, xdata, ydata)
-    df_K['D1'][['C0', 'C1']], _pcov = curve_fit(poly1, xdata, ydata)
+    df_K.loc[['C0', 'C1', 'C2', 'C3', 'C4'], 'D4'], _pcov = curve_fit(poly4, xdata, ydata)
+    df_K.loc[['C0', 'C1', 'C2', 'C3'], 'D3'], _pcov = curve_fit(poly3, xdata, ydata)
+    df_K.loc[['C0', 'C1', 'C2'], 'D2'], _pcov = curve_fit(poly2, xdata, ydata)
+    df_K.loc[['C0', 'C1'], 'D1'], _pcov = curve_fit(poly1, xdata, ydata)
 
     # Celsius
     df_C = pd.DataFrame(
@@ -220,10 +220,10 @@ def fit_poly(df_aT):
     xdata = df_aT['T'].values
     ydata = df_aT['log_aT'].values
 
-    df_C['D4'][['C0', 'C1', 'C2', 'C3', 'C4']], _pcov = curve_fit(poly4, xdata, ydata)
-    df_C['D3'][['C0', 'C1', 'C2', 'C3']], _pcov = curve_fit(poly3, xdata, ydata)
-    df_C['D2'][['C0', 'C1', 'C2']], _pcov = curve_fit(poly2, xdata, ydata)
-    df_C['D1'][['C0', 'C1']], _pcov = curve_fit(poly1, xdata, ydata)
+    df_C.loc[['C0', 'C1', 'C2', 'C3', 'C4'], 'D4'], _pcov = curve_fit(poly4, xdata, ydata)
+    df_C.loc[['C0', 'C1', 'C2', 'C3'], 'D3'], _pcov = curve_fit(poly3, xdata, ydata)
+    df_C.loc[['C0', 'C1', 'C2'], 'D2'], _pcov = curve_fit(poly2, xdata, ydata)
+    df_C.loc[['C0', 'C1'], 'D1'], _pcov = curve_fit(poly1, xdata, ydata)
 
     # Prep dataframes and add units for output
     df_C = df_C.T
