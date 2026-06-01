@@ -302,7 +302,7 @@ def get_aT(df_raw, RefT):
     df_aT['log_aT'] = np.nan 
 
     #Set shift factor at RefT
-    df_aT.loc[idx]['log_aT'] = 0
+    df_aT.loc[idx, 'log_aT'] = 0
 
     #Create debug data dictionary
     dshift ={}
@@ -310,14 +310,14 @@ def get_aT(df_raw, RefT):
     #Shift below RefT
     for i in range(idx, 0, -1):
         log_aT, shift = fit_at_pwr(df_raw, i, i-1) 
-        df_aT.loc[i-1]['log_aT'] = log_aT + df_aT.loc[i]['log_aT']
-        dshift[df_aT.loc[i-1]['T']] = shift
+        df_aT.loc[i-1, 'log_aT'] = log_aT + df_aT.loc[i, 'log_aT']
+        dshift[df_aT.loc[i-1, 'T']] = shift
         
     #Shift above RefT
     for i in range(idx, df_aT.shape[0]-1, 1):
         log_aT, shift = fit_at_pwr(df_raw, i, i+1) 
-        df_aT.loc[i+1]['log_aT'] = log_aT + df_aT.loc[i]['log_aT']
-        dshift[df_aT.loc[i+1]['T']] = shift
+        df_aT.loc[i+1, 'log_aT'] = log_aT + df_aT.loc[i, 'log_aT']
+        dshift[df_aT.loc[i+1, 'T']] = shift
     return df_aT, dshift
 
 
