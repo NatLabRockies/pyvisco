@@ -1,0 +1,28 @@
+v2.0.1 (2026-06-01)
+===================
+
+Patch release with documentation and Binder-rendering fixes. No
+behavioural changes to the Python API.
+
+Added
+-----
+
+- ``voila.json`` at the repo root sets the MathJax endpoint to
+  ``cdnjs.cloudflare.com/.../mathjax/2.7.7`` so that ``$…$`` /
+  ``$$…$$`` math delimiters in markdown cells render correctly under
+  Voila on Binder. Voila's default MathJax 3 build does not enable
+  ``$…$`` as an inline delimiter, which caused the Conventions table
+  and other inline math in ``LinViscoFit.ipynb`` to be left as literal
+  text in the rendered dashboard.
+
+Changed
+-------
+
+- ``README.md`` rewritten: CI / Notebooks / Docs / PyPI / Python / DOI
+  badges, explicit Installation section noting the Python ≥ 3.11
+  requirement, three numbered Usage paths (web app, tutorials,
+  library), a link to the ``pyvisco-examples.zip`` release asset, the
+  ANSYS 2021 R1 verification reference, and a License section. Binder
+  badge URL pinned to ``/main`` for more reliable image caching.
+
+`Release tag on GitHub <https://github.com/NatLabRockies/pyvisco/releases/tag/v2.0.1>`_
