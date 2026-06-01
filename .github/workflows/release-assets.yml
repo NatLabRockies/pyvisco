@@ -20,7 +20,7 @@ jobs:
 
       - name: Build examples archive
         run: |
-          cd examples
+          cd sample_data
           zip -r ../pyvisco-examples.zip \
             *.csv *.xls README.md
           cd ..

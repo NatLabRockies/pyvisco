@@ -12,6 +12,6 @@ matplotlib.use("Agg")
 
 
 @pytest.fixture(scope="session")
-def examples_dir() -> Path:
-    """Path to the bundled examples directory."""
-    return Path(__file__).resolve().parent.parent / "examples"
+def sample_data_dir() -> Path:
+    """Path to the bundled sample-data directory."""
+    return Path(__file__).resolve().parent.parent / "sample_data"

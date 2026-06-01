@@ -17,9 +17,9 @@ def test_conventions_G_contains_expected_keys():
     assert "G_relax" in conv
 
 
-def test_user_master_time_csv(examples_dir):
+def test_user_master_time_csv(sample_data_dir):
     """Load the bundled time-domain master curve example."""
-    path = examples_dir / "time_user_master.csv"
+    path = sample_data_dir / "time_user_master.csv"
     data = load.file(str(path))
     df_master, units = load.user_master(data, domain="time", RefT=25.0, modul="E")
 

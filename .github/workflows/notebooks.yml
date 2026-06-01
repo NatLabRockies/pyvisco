@@ -6,6 +6,8 @@ on:
     paths:
       - 'pyvisco/**'
       - 'verification/**.ipynb'
+      - 'tutorials/**'
+      - 'sample_data/**'
       - 'LinViscoFit.ipynb'
       - 'pyproject.toml'
       - '.github/workflows/notebooks.yml'
@@ -14,6 +16,8 @@ on:
     paths:
       - 'pyvisco/**'
       - 'verification/**.ipynb'
+      - 'tutorials/**'
+      - 'sample_data/**'
       - 'LinViscoFit.ipynb'
       - 'pyproject.toml'
       - '.github/workflows/notebooks.yml'
@@ -54,3 +58,14 @@ jobs:
         # model_ids change every run, so we only check that it executes
         # without raising (no output comparison).
         run: pytest --nbval-lax LinViscoFit.ipynb
+
+      - name: Smoke-test tutorial notebook (nbval-lax)
+        # Outputs include figure sizes / Prony optimization results which can
+        # vary slightly across platforms, so don't compare outputs.
+        run: pytest --nbval-lax tutorials/tutorial.ipynb
+
+      - name: Smoke-test tutorial scripts
+        run: |
+          python tutorials/freq_master.py
+          python tutorials/freq_raw.py
+          python tutorials/time_master.py

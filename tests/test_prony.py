@@ -25,14 +25,14 @@ def test_e_relax_norm_initial_and_long_time():
     )
 
 
-def test_time_domain_pipeline_roundtrip(examples_dir):
+def test_time_domain_pipeline_roundtrip(sample_data_dir):
     """End-to-end fit on the bundled time-domain master curve.
 
     Loads the example master curve, discretizes relaxation times, fits a Prony
     series, reconstructs the Generalized Maxwell response, and asserts the
     reconstruction matches the input data to within a tight tolerance.
     """
-    path = examples_dir / "time_user_master.csv"
+    path = sample_data_dir / "time_user_master.csv"
     data = load.file(str(path))
     df_master, units = load.user_master(data, domain="time", RefT=25.0, modul="E")
 
