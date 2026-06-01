@@ -1,0 +1,8 @@
+name: pyvisco-binder
+channels:
+  - conda-forge
+dependencies:
+  - python=3.13
+  - pip
+  - pip:
+      - -e .[interactive,app,excel]
