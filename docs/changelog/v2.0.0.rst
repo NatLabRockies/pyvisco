@@ -73,6 +73,14 @@ Fixed
   has a catch-all branch that writes the traceback to both the output
   widget and ``sys.stderr`` (so the failure is visible in the Voila
   server log).
+- ``verify.load_prony_ANSYS`` now captures the declared ``nterms`` from
+  the ``TB,PRONY,...`` record and raises a descriptive ``ValueError`` if
+  the parsed ``alpha_i`` / ``tau_i`` counts disagree with each other or
+  with the declared count (replaces a silently-discarded ``int()`` call
+  that could crash on unrelated ``TB`` records).
+- ``out.to_csv`` docstring corrected: returns a CSV ``str`` when
+  ``filepath`` is ``None``, otherwise writes to disk and returns
+  ``None`` (previously documented as ``pandas.DataFrame`` / ``bytes``).
 
 Removed
 -------
