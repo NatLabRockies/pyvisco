@@ -6,6 +6,7 @@ on:
     paths:
       - 'pyvisco/**'
       - 'verification/**.ipynb'
+      - 'LinViscoFit.ipynb'
       - 'pyproject.toml'
       - '.github/workflows/notebooks.yml'
   pull_request:
@@ -13,6 +14,7 @@ on:
     paths:
       - 'pyvisco/**'
       - 'verification/**.ipynb'
+      - 'LinViscoFit.ipynb'
       - 'pyproject.toml'
       - '.github/workflows/notebooks.yml'
   workflow_dispatch:
@@ -23,7 +25,7 @@ concurrency:
 
 jobs:
   execute:
-    name: execute verify_*.ipynb
+    name: validate notebooks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,15 +37,20 @@ jobs:
           python-version: "3.12"
           cache: pip
 
-      - name: Install package with interactive extras
+      - name: Install package with test extras
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[test]" nbclient
+          python -m pip install -e ".[test]"
 
-      - name: Execute verification notebooks
+      - name: Validate verification notebooks (compare outputs with nbval)
         run: |
-          for nb in verification/verify_*.ipynb; do
-            echo "::group::Executing $nb"
-            jupyter execute --kernel_name=python3 "$nb"
-            echo "::endgroup::"
-          done
+          pytest --nbval --sanitize-with verification/nbval_sanitize.cfg \
+            verification/verify_freq_master.ipynb \
+            verification/verify_freq_raw.ipynb \
+            verification/verify_time_master.ipynb
+
+      - name: Smoke-test voila GUI notebook (nbval-lax)
+        # LinViscoFit.ipynb is a voila app: cells display ipywidgets whose
+        # model_ids change every run, so we only check that it executes
+        # without raising (no output comparison).
+        run: pytest --nbval-lax LinViscoFit.ipynb
