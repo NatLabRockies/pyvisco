@@ -1,7 +1,4 @@
 {
-  "VoilaConfiguration": {
-    "enable_nbextensions": true
-  },
   "ServerApp": {
     "jpserver_extensions": {
       "voila": true

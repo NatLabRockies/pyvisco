@@ -1,0 +1,8 @@
+v1.0.5 and earlier
+==================
+
+Releases prior to ``v2.0.0`` were published under the
+`NREL/pyvisco <https://github.com/NREL/pyvisco>`_ repository. Refer to the
+`Git history <https://github.com/NatLabRockies/pyvisco/commits/main>`_ and
+the `original release notes
+<https://github.com/NatLabRockies/pyvisco/releases>`_ for details.
