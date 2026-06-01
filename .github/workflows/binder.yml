@@ -6,9 +6,8 @@ on:
       - main
     paths:
       - '**.ipynb'
-      - 'environment.yml'
-      - 'requirements.txt'
-      - 'Dockerfile'
+      - 'pyproject.toml'
+      - 'pyvisco/**'
       - 'binder/**'
       - '.github/workflows/binder.yml'
   workflow_dispatch: {}
