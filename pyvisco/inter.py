@@ -8,7 +8,7 @@ from base64 import b64encode
 
 import ipywidgets as widgets
 import pandas as pd
-from IPython.display import HTML, clear_output, display
+from IPython.display import HTML, Markdown, clear_output, display
 
 from . import load, master, opt, out, prony, shift, styles
 
@@ -154,7 +154,7 @@ class Widgets:
         self.b_theory.observe(self.show_theory, "value")
 
         # Theory out
-        self.out_theory = widgets.HTMLMath(value="")
+        self.out_theory = widgets.Output()
 
         """
         ------------------------------------------------------------------------
@@ -687,8 +687,8 @@ class Control(Widgets):
         self.collect_files()
         self.create_loading_bar()
 
-        with open("./theory.html") as file:
-            self.html_theory = file.read()
+        with open("./theory.md") as file:
+            self.md_theory = file.read()
 
     def collect_files(self):
         """
@@ -840,12 +840,12 @@ class Control(Widgets):
 
     def show_theory(self, change):
         """
-        Show theory section from HTML file.
+        Show theory section from Markdown file.
         """
-        if change["new"]:
-            self.out_theory.value = self.html_theory
-        elif not change["new"]:
-            self.out_theory.value = ""
+        with self.out_theory:
+            clear_output(wait=True)
+            if change["new"]:
+                display(Markdown(self.md_theory))
 
     """
     ----------------------------------------------------------------------------

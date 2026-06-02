@@ -1,0 +1,35 @@
+v2.0.2 (2026-06-02)
+===================
+
+Patch release fixing LaTeX rendering in the theory section across all
+Jupyter environments (Voila, JupyterLab, VS Code notebooks).
+
+Fixed
+-----
+
+- Theory section LaTeX now renders correctly in Voila, JupyterLab, and
+  VS Code notebooks. Switched from ``HTMLMath`` widget with
+  ``theory.html`` to ``Output`` widget with ``IPython.display.Markdown``
+  using ``theory.md``. This approach works natively across all Jupyter
+  environments without requiring MathJax JavaScript injection.
+
+Changed
+-------
+
+- ``inter.py``: replaced ``widgets.HTMLMath`` with ``widgets.Output`` and
+  ``display(Markdown(...))`` for the theory section display.
+
+- ``README.md``: Binder badge now opens JupyterLab instead of Voila for
+  more reliable LaTeX rendering. Added Google Colab badge as an
+  alternative (uses inline plots since ipympl is not supported in Colab).
+
+- ``voila.json``: removed outdated MathJax 2.7.7 URL; Voila 0.5+ uses
+  MathJax 3 by default.
+
+Removed
+-------
+
+- ``theory.html``: deleted in favour of ``theory.md`` which is now used
+  directly by ``inter.py``.
+
+`Release tag on GitHub <https://github.com/NatLabRockies/pyvisco/releases/tag/v2.0.2>`_
