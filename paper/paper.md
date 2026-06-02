@@ -54,15 +54,22 @@ its outputs are verified against the curve-fitting routine of ANSYS APDL
 
 Linear viscoelastic material models are routinely required by researchers and
 engineers working with polymers in structural, thermal, and reliability
-analyses. Although the underlying mathematics is well established
-[@brinson2015polymer; @ferry1980viscoelastic], translating raw experimental
-data into a Prony series suitable for FEA is tedious and error-prone. The
-process typically requires:
+analyses. The underlying mathematics --- the Boltzmann superposition
+integral, the Generalized Maxwell model, and time--frequency
+interconversion via Fourier transformation --- is well established
+[@brinson2015polymer; @ferry1980viscoelastic; @park1999methods;
+@roylance2001engineering], and the time--temperature superposition
+principle (TTSP) [@williams1955temperature] together with the
+Generalized Maxwell representation underpins the workflow described by
+@springer2020fracture, on which `pyvisco` is based. Translating raw
+experimental data into a Prony series suitable for FEA is, however,
+tedious and error-prone. The process typically requires:
 
 - shifting isothermal measurement sets in the frequency or time domain to
   form a master curve at a reference temperature;
-- fitting a shift function (e.g., WLF [@williams1955temperature] or
-  low-degree polynomial) to parameterize the temperature dependence;
+- fitting a shift function (e.g., WLF [@williams1955temperature],
+  Arrhenius, or low-degree polynomial) to parameterize the temperature
+  dependence;
 - selecting an appropriate number and distribution of Prony terms;
 - solving a bound-constrained least-squares problem to identify $\tau_i$
   and $E_i$ while enforcing $E_\infty \geq 0$ and $\sum \alpha_i \leq 1$;
@@ -133,11 +140,17 @@ inputs. This functional, dataframe-centric design was chosen so that:
 
 The Prony fit is formulated as a bound-constrained non-linear least-squares
 problem solved with SciPy's L-BFGS-B implementation [@virtanen2020scipy],
-following the formulation of @barrientos2019optimal. The reduced-term
-optimization routine progressively removes Prony terms and refits, using the
-ratio of residuals ($R^2_{\mathrm{opt}} \approx 1.5\,R^2_0$) as a default
-stopping heuristic that the user can override. Numerical routines build on
-`numpy` [@harris2020array], `scipy` [@virtanen2020scipy], `pandas`
+following the formulation of @barrientos2019optimal and the
+interconversion methodology of @park1999methods. Time-domain to
+frequency-domain conversion of relaxation data uses the Fourier
+transformation summarized in @springer2020fracture. Master curves are
+optionally smoothed using a Savitzky--Golay filter [@savitzky1964smoothing]
+before Prony-series fitting to suppress measurement noise without
+broadening the relaxation spectrum. The reduced-term optimization routine
+progressively removes Prony terms and refits, using the ratio of residuals
+($R^2_{\mathrm{opt}} \approx 1.5\,R^2_0$) as a default stopping heuristic
+that the user can override. Numerical routines build on `numpy`
+[@harris2020array], `scipy` [@virtanen2020scipy], `pandas`
 [@mckinney2010data], and `matplotlib` [@hunter2007matplotlib]; the browser
 UI uses `ipywidgets` and runs as a JupyterLab session on Binder.
 
