@@ -46,7 +46,8 @@ There are three ways to use pyvisco:
 
    The Space tracks the `main` branch and rebuilds automatically. The
    first request after a period of inactivity may take ~30s while the
-   container wakes up.
+   container wakes up. The same app can also be run locally with
+   `voila LinViscoFit.ipynb` after a `pip install pyvisco`.
 
 2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
 
