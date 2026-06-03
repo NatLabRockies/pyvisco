@@ -18,6 +18,7 @@ authors:
 affiliations:
   - name: National Laboratory of the Rockies, United States
     index: 1
+    ror: "036266993"
 date: 2 June 2026
 bibliography: paper.bib
 ---
