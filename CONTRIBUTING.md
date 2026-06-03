@@ -2,6 +2,8 @@
 
 Thanks for your interest in improving `pyvisco`. This document explains how
 to report issues, ask for help, and contribute code or documentation.
+Participation in this project is governed by the
+[Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Reporting issues
 
