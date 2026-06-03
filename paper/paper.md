@@ -168,7 +168,8 @@ executed on every push via GitHub Actions to guard against regressions.
 module encapsulants and interconnect adhesives, as part of the PV
 reliability and durability research described by @springer2020fracture.
 Since its initial public release in 2022 the package has been published on
-PyPI, archived on Zenodo with a DOI per release, indexed by Read the Docs,
+PyPI, archived on Zenodo with a DOI per release [@springer2022pyvisco],
+indexed by Read the Docs,
 and developed openly on GitHub with continuous integration, an issue
 tracker, a tagged release history, and a public changelog spanning the v1.x
 and v2.x series.
@@ -206,7 +207,7 @@ form directly usable by the wider engineering community.
 
 # AI usage disclosure
 
-Generative AI tools were used during the preparation of the v2.0 release and
+Generative AI tools were used during the preparation of the v2.x release and
 of this manuscript:
 
 - **Tools/models used:** GitHub Copilot in Visual Studio Code (Claude Opus
