@@ -77,6 +77,21 @@ fallback_version = "1.0.5"
 minversion = "7.0"
 addopts = "-ra --strict-markers"
 testpaths = ["tests"]
+filterwarnings = [
+    # Plot helpers call fig.show(); harmless under the Agg backend used in tests.
+    "ignore:FigureCanvasAgg is non-interactive:UserWarning",
+]
+
+[tool.coverage.run]
+source = ["pyvisco"]
+omit = [
+    # Empty package marker
+    "pyvisco/__init__.py",
+    # Voila/ipywidgets GUI layer -- not exercised under headless pytest
+    "pyvisco/inter.py",
+    # Matplotlib style mutator -- mutates global state, intentionally untested
+    "pyvisco/styles.py",
+]
 
 [tool.ruff]
 line-length = 100
@@ -89,3 +104,4 @@ ignore = ["E501"]
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["B"]
 "pyvisco/inter.py" = ["E402"]
+"tutorials/tutorial.ipynb" = ["E402"]

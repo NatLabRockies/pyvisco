@@ -26,18 +26,27 @@ def load_prony_ANSYS(filepath):
     tau_i = []
     mod = True
     nterms = None
+    in_prony = False
     with open(filepath) as f:
         for line in f:
             lsplit = line.rstrip("\n").split(",")
             if lsplit[0] == "TB":
                 # APDL: TB,PRONY,matid,ntemp,nterms,...
-                # `nterms` is the declared number of Prony pairs; capture it
-                # so we can validate the parsed payload below.
-                try:
-                    nterms = int(lsplit[4])
-                except (IndexError, ValueError):
-                    nterms = None
-            if lsplit[0] == "TBDATA":
+                # Only the PRONY block's TBDATA records describe (alpha_i, tau_i);
+                # subsequent TB,SHIFT / TB,... blocks must be skipped because
+                # their TBDATA payloads contain coefficients with completely
+                # different shapes (and possibly non-numeric tokens like
+                # ``273-5``).
+                tb_type = lsplit[1].strip().upper() if len(lsplit) > 1 else ""
+                if tb_type.startswith("PRON"):
+                    in_prony = True
+                    try:
+                        nterms = int(lsplit[4])
+                    except (IndexError, ValueError):
+                        nterms = None
+                else:
+                    in_prony = False
+            if lsplit[0] == "TBDATA" and in_prony:
                 if len(lsplit) == 5:
                     if mod:
                         alpha_i.append(lsplit[2])
