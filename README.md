@@ -6,7 +6,7 @@
 [![Documentation Status](https://readthedocs.org/projects/pyvisco/badge/?version=latest)](https://pyvisco.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/pyvisco.svg)](https://pypi.org/project/pyvisco/)
 [![Python](https://img.shields.io/pypi/pyversions/pyvisco.svg)](https://pypi.org/project/pyvisco/)
-[![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6384954.svg)](https://doi.org/10.5281/zenodo.6384954)
 
 Pyvisco is a Python library that supports the identification of Prony series parameters for Generalized Maxwell models describing linear viscoelastic materials.
 
@@ -58,7 +58,7 @@ The Python implementation is verified against the curve-fitting routine of the c
 
 ## Citation
 
-If you use pyvisco in your published work, please cite it along with the version number and the specific DOI for that version on Zenodo: [![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699).
+If you use pyvisco in your published work, please cite it along with the version number and the specific DOI for that version on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6384954.svg)](https://doi.org/10.5281/zenodo.6384954).
 
 ### APA
 
