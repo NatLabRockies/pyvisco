@@ -81,4 +81,4 @@ Springer, Martin (2022). PYVISCO: A Python library for identifying Prony series 
 
 ## License
 
-Released under the [CLA 1.0](LICENSE) license.
+Released under the [BSD 3-Clause](LICENSE) license.
