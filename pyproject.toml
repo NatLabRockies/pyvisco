@@ -67,7 +67,7 @@ Documentation = "https://pyvisco.readthedocs.io/"
 
 [tool.setuptools.packages.find]
 include = ["pyvisco*"]
-exclude = ["tests*", "build*", "docs*", "verification*", "binder*"]
+exclude = ["tests*", "build*", "docs*", "verification*"]
 
 [tool.setuptools_scm]
 # Fallback when not installed from a git checkout with tags

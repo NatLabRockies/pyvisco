@@ -9,6 +9,7 @@ adheres to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
    :maxdepth: 1
    :caption: Releases
 
+   v2.1.0
    v2.0.2
    v2.0.1
    v2.0.0

@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/NatLabRockies/pyvisco/actions/workflows/ci.yml/badge.svg)](https://github.com/NatLabRockies/pyvisco/actions/workflows/ci.yml)
 [![Notebooks](https://github.com/NatLabRockies/pyvisco/actions/workflows/notebooks.yml/badge.svg)](https://github.com/NatLabRockies/pyvisco/actions/workflows/notebooks.yml)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-blue)](https://huggingface.co/spaces/mspringer-nlr/pyvisco-voila)
 [![Documentation Status](https://readthedocs.org/projects/pyvisco/badge/?version=latest)](https://pyvisco.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/pyvisco.svg)](https://pypi.org/project/pyvisco/)
 [![Python](https://img.shields.io/pypi/pyversions/pyvisco.svg)](https://pypi.org/project/pyvisco/)
@@ -31,9 +32,13 @@ Requires Python 3.11 or newer.
 
 There are three ways to use pyvisco:
 
-1. **Interactive web app (no install required).** The `LinViscoFit.ipynb` notebook provides a graphical interface (upload data → fit → download Prony series) and is rendered with voila on Binder:
+1. **Interactive web app (no install required).** The `LinViscoFit.ipynb` notebook provides a graphical interface (upload data → fit → download Prony series) and is hosted as a Voila application on Hugging Face Spaces:
 
-   [![badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NatLabRockies/pyvisco/main?urlpath=voila%2Frender%2FLinViscoFit.ipynb)
+   [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Open%20app-Hugging%20Face%20Space-blue)](https://huggingface.co/spaces/mspringer-nlr/pyvisco-voila)
+
+   The Space tracks the `main` branch and rebuilds automatically. The
+   first request after a period of inactivity may take ~30s while the
+   container wakes up.
 
 2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
 
