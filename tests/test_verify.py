@@ -60,10 +60,7 @@ def test_load_prony_ANSYS_raises_on_alpha_tau_mismatch(tmp_path):
     """If parsing produces unequal alpha_i / tau_i counts, raise ValueError."""
     path = tmp_path / "bad_pairs.MPL"
     # 3-value payload yields 2 alpha but only 1 tau -> mismatch.
-    path.write_text(
-        "TB,PRONY,_MAT,1,2,SHEAR\n"
-        "TBDATA,1,0.1,1.0,0.2\n"
-    )
+    path.write_text("TB,PRONY,_MAT,1,2,SHEAR\nTBDATA,1,0.1,1.0,0.2\n")
     with pytest.raises(ValueError, match="alpha_i values but"):
         verify.load_prony_ANSYS(str(path))
 

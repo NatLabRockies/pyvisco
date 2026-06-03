@@ -1,4 +1,4 @@
-﻿"""
+"""
 Collection of functions to apply the time-temperature superposition
 principle to create a master curve from measurements performed at different
 temperatures.

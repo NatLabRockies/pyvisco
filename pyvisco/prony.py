@@ -1,4 +1,4 @@
-﻿"""
+"""
 Collection of function to pre-process the master curve and perform the Prony
 series parameter identification.
 """

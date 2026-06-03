@@ -91,4 +91,3 @@ def raw_and_master(request, sample_data_dir):
     df_aT, dshift = master.get_aT(df_raw, RefT)
     df_master = master.get_curve(df_raw, df_aT, RefT)
     return df_raw, df_master, dshift, units
-

@@ -1,4 +1,4 @@
-﻿"""
+"""
 Collection of functions to prepare the master curve for the identification
 of the Prony series parameters. Methods are provided to shift the raw
 measurement data into a master curve and remove measurement outliers through

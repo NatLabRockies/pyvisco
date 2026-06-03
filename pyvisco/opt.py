@@ -1,4 +1,4 @@
-﻿"""
+"""
 Collection of functions to minimize the number of Prony series terms used
 in the Generalized Maxwell model.
 """

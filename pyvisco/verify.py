@@ -1,4 +1,4 @@
-﻿"""
+"""
 Collection of function to compare and verify the Python implementation
 within this module with the curve fitting routine of Ansys APDL 2021 R1.
 """

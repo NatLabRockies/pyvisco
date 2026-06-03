@@ -1,4 +1,4 @@
-﻿"""
+"""
 Collection of functions to load measurement data and prepare pandas
 dataframes for further processing.
 """
