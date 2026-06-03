@@ -28,6 +28,14 @@ pip install pyvisco
 
 Requires Python 3.11 or newer.
 
+## Example data
+
+Bundled example input files live under [`sample_data/`](sample_data/) and
+are also published as a downloadable archive on every GitHub release:
+[`pyvisco-examples.zip`](https://github.com/NatLabRockies/pyvisco/releases/latest/download/pyvisco-examples.zip).
+These files can be loaded directly into the web app, the tutorial
+notebook, or any of the standalone scripts described below.
+
 ## Usage
 
 There are three ways to use pyvisco:
@@ -43,8 +51,6 @@ There are three ways to use pyvisco:
 2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
 
 3. **As a library.** Import `pyvisco` and call the modules directly. See the [API documentation](https://pyvisco.readthedocs.io/en/latest/) for details.
-
-Bundled example input files live under [`sample_data/`](sample_data/) and are also published as a downloadable archive on every GitHub release: [`pyvisco-examples.zip`](https://github.com/NatLabRockies/pyvisco/releases/latest/download/pyvisco-examples.zip).
 
 ## Verification
 
