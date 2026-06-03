@@ -2,10 +2,11 @@
 
 [![CI](https://github.com/NatLabRockies/pyvisco/actions/workflows/ci.yml/badge.svg)](https://github.com/NatLabRockies/pyvisco/actions/workflows/ci.yml)
 [![Notebooks](https://github.com/NatLabRockies/pyvisco/actions/workflows/notebooks.yml/badge.svg)](https://github.com/NatLabRockies/pyvisco/actions/workflows/notebooks.yml)
+[![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Space-blue)](https://huggingface.co/spaces/mspringer-nlr/pyvisco-voila)
 [![Documentation Status](https://readthedocs.org/projects/pyvisco/badge/?version=latest)](https://pyvisco.readthedocs.io/en/latest/?badge=latest)
 [![PyPI](https://img.shields.io/pypi/v/pyvisco.svg)](https://pypi.org/project/pyvisco/)
 [![Python](https://img.shields.io/pypi/pyversions/pyvisco.svg)](https://pypi.org/project/pyvisco/)
-[![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6384954.svg)](https://doi.org/10.5281/zenodo.6384954)
 
 Pyvisco is a Python library that supports the identification of Prony series parameters for Generalized Maxwell models describing linear viscoelastic materials.
 
@@ -27,19 +28,29 @@ pip install pyvisco
 
 Requires Python 3.11 or newer.
 
+## Example data
+
+Bundled example input files live under [`sample_data/`](sample_data/) and
+are also published as a downloadable archive on every GitHub release:
+[`pyvisco-examples.zip`](https://github.com/NatLabRockies/pyvisco/releases/latest/download/pyvisco-examples.zip).
+These files can be loaded directly into the web app, the tutorial
+notebook, or any of the standalone scripts described below.
+
 ## Usage
 
 There are three ways to use pyvisco:
 
-1. **Interactive web app (no install required).** The `LinViscoFit.ipynb` notebook provides a graphical interface (upload data → fit → download Prony series) and is rendered with voila on Binder:
+1. **Interactive web app (no install required).** The `LinViscoFit.ipynb` notebook provides a graphical interface (upload data → fit → download Prony series) and is hosted as a Voila application on Hugging Face Spaces:
 
-   [![badge](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/NatLabRockies/pyvisco/main?urlpath=voila%2Frender%2FLinViscoFit.ipynb)
+   [![Hugging Face Space](https://img.shields.io/badge/%F0%9F%A4%97%20Open%20app-Hugging%20Face%20Space-blue)](https://huggingface.co/spaces/mspringer-nlr/pyvisco-voila)
+
+   The Space tracks the `main` branch and rebuilds automatically. The
+   first request after a period of inactivity may take ~30s while the
+   container wakes up.
 
 2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
 
 3. **As a library.** Import `pyvisco` and call the modules directly. See the [API documentation](https://pyvisco.readthedocs.io/en/latest/) for details.
-
-Bundled example input files live under [`sample_data/`](sample_data/) and are also published as a downloadable archive on every GitHub release: [`pyvisco-examples.zip`](https://github.com/NatLabRockies/pyvisco/releases/latest/download/pyvisco-examples.zip).
 
 ## Verification
 
@@ -47,7 +58,7 @@ The Python implementation is verified against the curve-fitting routine of the c
 
 ## Citation
 
-If you use pyvisco in your published work, please cite it along with the version number and the specific DOI for that version on Zenodo: [![DOI](https://zenodo.org/badge/473711699.svg)](https://zenodo.org/badge/latestdoi/473711699).
+If you use pyvisco in your published work, please cite it along with the version number and the specific DOI for that version on Zenodo: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6384954.svg)](https://doi.org/10.5281/zenodo.6384954).
 
 ### APA
 

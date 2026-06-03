@@ -1,3 +1,0 @@
-#!/bin/bash
-# Enable voila server extension
-jupyter server extension enable voila --sys-prefix
