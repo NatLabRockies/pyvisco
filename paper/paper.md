@@ -234,4 +234,17 @@ The author thanks colleagues for early feedback on the workflow, and the
 maintainers of `numpy`, `scipy`, `pandas`, `matplotlib`, and `ipywidgets`
 on which `pyvisco` builds.
 
+This work was authored by the National Laboratory of the Rockies for the
+U.S. Department of Energy (DOE), operated under Contract
+No. DE-AC36-08GO28308. Funding provided as part of the Durable Module
+Materials Consortium 2 (DuraMAT 2), funded by the U.S. Department of
+Energy Office of Critical Minerals and Energy Innovation Integrated
+Energy Systems Office, agreement number 38259. The views expressed in
+the article do not necessarily represent the views of the DOE or the
+U.S. Government. The U.S. Government retains and the publisher, by
+accepting the article for publication, acknowledges that the
+U.S. Government retains a nonexclusive, paid-up, irrevocable, worldwide
+license to publish or reproduce the published form of this work, or
+allow others to do so, for U.S. Government purposes.
+
 # References
