@@ -46,7 +46,8 @@ $G_i$) of a Prony series compatible with the Generalized Maxwell model. An
 optional minimization routine produces a reduced-term Prony series suitable
 for computationally efficient FEA simulations. The library is exposed both as
 a programmatic API and through a Jupyter-based graphical user interface
-(`LinViscoFit.ipynb`) that runs without local installation via Binder, and
+(`LinViscoFit.ipynb`) that runs without local installation as a Voila
+application on Hugging Face Spaces, and
 its outputs are verified against the curve-fitting routine of ANSYS APDL
 2021 R1 using bundled reference cases.
 
@@ -152,7 +153,7 @@ progressively removes Prony terms and refits, using the ratio of residuals
 that the user can override. Numerical routines build on `numpy`
 [@harris2020array], `scipy` [@virtanen2020scipy], `pandas`
 [@mckinney2010data], and `matplotlib` [@hunter2007matplotlib]; the browser
-UI uses `ipywidgets` and runs as a JupyterLab session on Binder.
+UI is served by Voila as a Docker-based Hugging Face Space.
 
 Outputs include the fitted Prony parameters as CSV, plots in PNG, and a
 single ZIP archive bundling all results for downstream FEA use. The
