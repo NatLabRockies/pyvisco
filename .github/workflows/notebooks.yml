@@ -29,47 +29,41 @@ concurrency:
 
 jobs:
   execute:
-    name: validate notebooks
+    name: validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # for setuptools-scm
+          fetch-depth: 0  # setuptools-scm
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
 
-      - name: Install package with test extras
+      - name: Install
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[test]"
 
-      - name: Validate verification notebooks (execute end-to-end)
-        # These notebooks use `%matplotlib ipympl`, whose Canvas widget HTML
-        # repr is not stable across platforms (Windows author vs Linux CI),
-        # so we only assert that each cell executes without raising. The
-        # actual numeric comparison against the APDL reference happens
-        # inside `visco.verify.plot_fit_ANSYS`.
+      - name: Verification notebooks
+        # nbval-lax: ipympl Canvas HTML repr is not cross-platform stable;
+        # numeric checks happen inside visco.verify.plot_fit_ANSYS.
         run: |
           pytest --nbval-lax \
             verification/verify_freq_master.ipynb \
             verification/verify_freq_raw.ipynb \
             verification/verify_time_master.ipynb
 
-      - name: Smoke-test voila GUI notebook (nbval-lax)
-        # LinViscoFit.ipynb is a voila app: cells display ipywidgets whose
-        # model_ids change every run, so we only check that it executes
-        # without raising (no output comparison).
+      - name: Voila GUI notebook
+        # nbval-lax: ipywidget model_ids change every run.
         run: pytest --nbval-lax LinViscoFit.ipynb
 
-      - name: Smoke-test tutorial notebook (nbval-lax)
-        # Outputs include figure sizes / Prony optimization results which can
-        # vary slightly across platforms, so don't compare outputs.
+      - name: Tutorial notebook
+        # nbval-lax: figure sizes / Prony results vary slightly across platforms.
         run: pytest --nbval-lax tutorials/tutorial.ipynb
 
-      - name: Smoke-test tutorial scripts
+      - name: Tutorial scripts
         run: |
           python tutorials/freq_master.py
           python tutorials/freq_raw.py

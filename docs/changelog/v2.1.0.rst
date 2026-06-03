@@ -1,0 +1,49 @@
+v2.1.0 (2026-06-03)
+===================
+
+Migration of the interactive web application from Binder/Voila to a
+dedicated Hugging Face Space (Docker SDK).
+
+Added
+-----
+
+- Hugging Face Space hosting the ``LinViscoFit.ipynb`` Voila app at
+  https://huggingface.co/spaces/mspringer-nlr/pyvisco-voila. The Space
+  is built from a small companion repository
+  (`pyvisco-voila <https://huggingface.co/spaces/mspringer-nlr/pyvisco-voila/tree/main>`_)
+  that clones ``NatLabRockies/pyvisco`` at build time and serves the
+  notebook with Voila on port 7860.
+
+Changed
+-------
+
+- ``README.md``: replaced the Binder badge / launch instructions with a
+  Hugging Face Space badge and link. Reworded the "Interactive web app"
+  bullet accordingly.
+
+- ``docs/index.rst``: web-app link now points to the Hugging Face Space
+  instead of Binder.
+
+- ``pyproject.toml``: removed the now-obsolete ``binder*`` entry from
+  ``[tool.setuptools.packages.find] exclude``.
+
+Deprecated
+----------
+
+- The Binder launch path is no longer supported. Use the Hugging Face
+  Space link above instead.
+
+Removed
+-------
+
+- ``binder/`` directory (``Dockerfile``, ``environment.yml``,
+  ``postBuild``, ``jupyter_config.json``).
+
+- ``.github/workflows/binder.yml`` (Docker Hub image build that fed the
+  Binder ``Dockerfile``).
+
+- ``voila.json``: Binder/Voila configuration file. Voila options for the
+  Hugging Face Space are passed directly via the Space ``Dockerfile``
+  ``CMD``.
+
+`Release tag on GitHub <https://github.com/NatLabRockies/pyvisco/releases/tag/v2.1.0>`_
