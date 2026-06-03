@@ -1,4 +1,4 @@
-"""
+﻿"""
 Collection of functions to load measurement data and prepare pandas
 dataframes for further processing.
 """
@@ -16,7 +16,7 @@ def conventions(modul):
     Parameters
     ----------
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Returns
     -------
@@ -26,9 +26,9 @@ def conventions(modul):
 
     Notes
     -----
-    Tensile moduli are denoted as 'E' and shear moduli  are denoted as 'G'.
+    Tensile moduli are denoted as ``E`` and shear moduli are denoted as ``G``.
     Only the tensile moduli are summarized in the table below. For shear modulus
-    data, replace 'E' with 'G', e.g. 'E_relax' -> 'G_relax'.
+    data, replace ``E`` with ``G``, e.g. ``E_relax`` -> ``G_relax``.
 
     ========================  ========  ===================
     Physical quantity         Variable  Unit
@@ -37,7 +37,7 @@ def conventions(modul):
     Storage modulus:          E_stor    [Pa, kPa, MPa, GPa]
     Loss modulus:             E_loss    [Pa, kPa, MPa, GPa]
     Complex modulus:          E_comp    [Pa, kPa, MPa, GPa]
-    Loss factor:              tan_del   -
+    Loss factor:              tan_del   ``-``
     Instantaneous modulus:    E_0       [Pa, kPa, MPa, GPa]
     Equilibrium modulus:      E_inf     [Pa, kPa, MPa, GPa]
     Angular frequency:        omega     rad/s
@@ -46,8 +46,8 @@ def conventions(modul):
     Temperature:              T         °C
     Relaxation times:         tau_i     s
     Relaxation moduli:        E_i       [Pa, kPa, MPa, GPa]
-    Norm. relaxation moduli:  alpha_i   -
-    Shift factor:             log_aT    -
+    Norm. relaxation moduli:  alpha_i   ``-``
+    Shift factor:             log_aT    ``-``
     ========================  ========  ===================
     """
     m = modul
@@ -200,7 +200,7 @@ def Eplexor_raw(data, modul):
         Excel file content loaded into pandas.DataFrame.
 
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Returns
     -------
@@ -271,11 +271,11 @@ def user_raw(data, domain, modul):
         Excel file content.
 
     domain : {'freq', 'time'}
-        Defines wether frequency domain ('freq') or time domain ('time') input
+        Defines wether frequency domain (``freq``) or time domain (``time``) input
         data are provided.
 
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Returns
     -------
@@ -304,7 +304,7 @@ def user_raw(data, domain, modul):
     Dependent on the performed material characterization, either tensile or
     shear modulus values in either the time or frequency domain must be provided.
 
-    Tensile moduli are denoted as 'E' and shear moduli  are denoted as 'G'.
+    Tensile moduli are denoted as ``E`` and shear moduli are denoted as ``G``.
     Frequency domain data are provided in Hertz: [f] = Hz
     Time domain data are provided in seconds: [t] = s
     Temperature levels are provided in Celsius: [T] = C
@@ -376,7 +376,7 @@ def Eplexor_master(data, modul):
     data : bytes
         Excel file content.
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Raises
     ------
@@ -463,12 +463,12 @@ def user_master(data, domain, RefT, modul):
     data : bytes
         Excel file content.
     domain : {'freq', 'time'}
-        Defines wether frequency domain ('freq') or time domain ('time') input
+        Defines wether frequency domain (``freq``) or time domain (``time``) input
         data are provided.
     RefT : int or float
         Reference tempeature of the master curve in Celsius.
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Returns
     -------
@@ -495,7 +495,7 @@ def user_master(data, domain, RefT, modul):
     Dependent on the performed materials characterization, either tensile or
     shear modulus values in either the time or frequency domain must be provided.
 
-    Tensile moduli are denoted as 'E' and shear moduli  are denoted as 'G'.
+    Tensile moduli are denoted as ``E`` and shear moduli are denoted as ``G``.
     Frequency domain data are provided in Hertz: [f] = Hz
     Time domain data are provided in seconds: [t] = s
 
@@ -642,9 +642,9 @@ def get_units(units, modul, domain, Eplexor=False):
         Contains the names of the physical quantities as key and
         the corresponding names of the units as item.
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
     domain : {'freq', 'time'}
-        Defines wether frequency domain ('freq') or time domain ('time') input
+        Defines wether frequency domain (``freq``) or time domain (``time``) input
         data are provided.
     Eplexor : bool, default = false
         If input file is Excel file from Eplexor software -> True
@@ -689,7 +689,7 @@ def check_units(units, modul="E"):
         Contains the names of the physical quantities as key and
         the corresponding names of the units as item.
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Raises
     ------

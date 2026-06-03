@@ -1,4 +1,4 @@
-"""
+﻿"""
 Collection of function to pre-process the master curve and perform the Prony
 series parameter identification.
 """
@@ -30,12 +30,12 @@ def discretize(df_master, window="round", nprony=0):
          Contains the master curve data.
     window : {'round', 'exact', 'min'}
         Defines the location of the discretization of the relaxation times.
-        - 'exact' : Use whole window of the experimental data and logarithmically
+        - ``exact`` : Use whole window of the experimental data and logarithmically
         space the relaxation times inbetween.
-        - 'round' : Round the minimum and maximum values of the experimental data
+        - ``round`` : Round the minimum and maximum values of the experimental data
         to the nearest base 10 number and logarithmically space the
         remaining relaxation times inbetween the rounded numbers
-        - 'min'   : Position of relaxation times is optimized during minimization
+        - ``min``   : Position of relaxation times is optimized during minimization
         routine to reduce the number of Prony terms.
     nprony : numeric, default = 0
         Number of Prony terms to be used for the discretization. The number
@@ -700,7 +700,7 @@ def calc_GMaxw(E_0, df_terms, f_min, f_max, decades, modul, **kwargs):
         the necessary number of data points spanning the frequency range for
         an appropriate resolution.
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Returns
     -------

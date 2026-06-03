@@ -1,4 +1,4 @@
-"""
+﻿"""
 Collection of functions to apply the time-temperature superposition
 principle to create a master curve from measurements performed at different
 temperatures.
@@ -41,7 +41,7 @@ def WLF(Temp, RefT, WLF_C1, WLF_C2):
 
 def poly1(x, C0, C1):
     """
-    Calculate a polynomial function of degree 1 with a single variable 'x'.
+    Calculate a polynomial function of degree 1 with a single variable ``x``.
 
     Parameters
     ----------
@@ -60,7 +60,7 @@ def poly1(x, C0, C1):
 
 def poly2(x, C0, C1, C2):
     """
-    Calculate a polynomial function of degree 2 with a single variable 'x'.
+    Calculate a polynomial function of degree 2 with a single variable ``x``.
 
     Parameters
     ----------
@@ -79,7 +79,7 @@ def poly2(x, C0, C1, C2):
 
 def poly3(x, C0, C1, C2, C3):
     """
-    Calculate a polynomial function of degree 3 with a single variable 'x'.
+    Calculate a polynomial function of degree 3 with a single variable ``x``.
 
     Parameters
     ----------
@@ -98,7 +98,7 @@ def poly3(x, C0, C1, C2, C3):
 
 def poly4(x, C0, C1, C2, C3, C4):
     """
-    Calculate a polynomial function of degree 4 with a single variable 'x'.
+    Calculate a polynomial function of degree 4 with a single variable ``x``.
 
     Parameters
     ----------
@@ -124,8 +124,8 @@ def fit_WLF(RefT, df_aT):
     RefT : numeric
         Reference temperature chosen to construct the master curve.
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
 
     Returns
     -------
@@ -170,8 +170,8 @@ def fit_poly(df_aT):
     Parameters
     ----------
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
 
     Returns
     -------
@@ -248,8 +248,8 @@ def plot(df_aT, df_WLF, df_C):
     Parameters
     ----------
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
 
     df_WLF : pandas.DataFrame
         Contains the necessary parameters to calculate the WLF

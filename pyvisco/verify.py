@@ -1,4 +1,4 @@
-"""
+﻿"""
 Collection of function to compare and verify the Python implementation
 within this module with the curve fitting routine of Ansys APDL 2021 R1.
 """
@@ -101,7 +101,7 @@ def prep_prony_ANSYS(df_prony, prony, E_0=None):
     Prepare ANSYS Prony series parameters for further processing.
 
     The ANSYS curve fitting routine for viscoelastic materials only stores
-    the Prony series parameters ('tau_i', 'alpha_i') in the material card file.
+    the Prony series parameters (``tau_i``, ``alpha_i``) in the material card file.
     To calculate the master curve from the Prony series parameters the
     instantenous modulus and frequency range are required and added to the
     dataframe of the ANSYS Prony series parameters.
@@ -122,7 +122,7 @@ def prep_prony_ANSYS(df_prony, prony, E_0=None):
     -------
     prony_ANSYS : dict
         Contains the ANSYS Prony series parameter in the same format as the
-        Python implementation provides (see 'prony' Parameter above).
+        Python implementation provides (see ``prony`` Parameter above).
     """
     m = prony["modul"]
     if E_0 is None:

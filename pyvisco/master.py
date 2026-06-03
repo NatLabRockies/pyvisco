@@ -1,4 +1,4 @@
-"""
+﻿"""
 Collection of functions to prepare the master curve for the identification
 of the Prony series parameters. Methods are provided to shift the raw
 measurement data into a master curve and remove measurement outliers through
@@ -117,9 +117,9 @@ def fit_at_pwr(df_raw, gb_ref, gb_shift):
     df_raw : pandas.DataFrame
         Contains the processed raw measurement data.
     gb_ref : int
-        Dataframe 'Set' number of the reference measurement set.
+        Dataframe ``Set`` number of the reference measurement set.
     gb_shift : int
-        Dataframe 'Set' number of the measurement set that is shifted.
+        Dataframe ``Set`` number of the measurement set that is shifted.
 
     Returns
     -------
@@ -276,8 +276,8 @@ def get_aT(df_raw, RefT):
     Returns
     -------
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
 
     See also
     --------
@@ -326,8 +326,8 @@ def get_curve(df_raw, df_aT, RefT):
     df_raw : pandas.DataFrame
         Contains the processed raw measurement data.
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
     RefT : int or float
         Reference tempeature of the master curve in Celsius.
 
