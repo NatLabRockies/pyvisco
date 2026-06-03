@@ -15,6 +15,7 @@ Contents
    :maxdepth: 3
 
    readme_link
+   theory
    api
    changelog/index
 

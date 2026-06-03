@@ -52,7 +52,7 @@ test = [
 docs = [
     "sphinx>=7.0",
     "myst-parser>=3.0",
-    "sphinx-rtd-theme>=2.0",
+    "furo>=2024.8",
 ]
 dev = [
     "pyvisco[test,docs]",
