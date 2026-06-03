@@ -1,8 +1,10 @@
 v2.1.1 (2026-06-03)
 ===================
 
-Documentation-only release adding the JOSS submission materials and
-contributor guidelines. No library code or API changes.
+Documentation, packaging, and test-suite release adding the JOSS
+submission materials, contributor guidelines, and an expanded unit-test
+suite. Includes three bug fixes surfaced by the expanded test coverage;
+no other library or API changes.
 
 Added
 -----
@@ -32,6 +34,12 @@ Added
   Prony series, time-temperature superposition). Enabled the
   ``dollarmath`` MyST extension in ``docs/conf.py`` so the ``$...$`` and
   ``$$...$$`` equations render via MathJax.
+
+- Expanded the pytest suite from 8 to 85 tests, covering the public
+  ``load``, ``master``, ``shift``, ``prony``, ``opt``, ``out``, and
+  ``verify`` modules and their plot helpers across both time and
+  frequency domains. Added two ANSYS APDL ``.MPL`` material cards
+  (WLF and user polynomial shift functions) under ``tests/data/``.
 
 Changed
 -------
@@ -72,6 +80,25 @@ Changed
   ``'min'``, ``'x'``, ``'prony'``) to reST double-backtick inline code so
   they render in monospace in the API documentation. The numpydoc
   ``{'E', 'G'}`` literal-choice annotations were left unchanged.
+
+Fixed
+-----
+
+- ``master.plot_shift_update``: hard-coded the frequency-domain storage
+  modulus column, raising ``KeyError`` on time-domain master curves.
+  Now selects ``(t, M_relax)`` or ``(f, M_stor)`` / ``(f, M_loss)``
+  based on the master-curve domain.
+
+- ``prony.GMaxw_temp``: the ``D4`` / ``D3`` / ``D2`` / ``D1``
+  polynomial-shift branches used stale column labels and raised
+  ``KeyError``. Now indexes ``df_coeff`` with the ``'D4'`` / ``'D3'`` /
+  ``'D2'`` / ``'D1'`` row labels produced by ``shift.fit_poly``.
+
+- ``verify.load_prony_ANSYS``: the ``TBDATA`` parser also consumed
+  records from a trailing ``TB,SHIFT,…`` block, leaking shift
+  coefficients into the Prony arrays and raising ``ValueError`` on
+  tokens such as ``273-5``. Now scoped to the active ``TB,PRONY``
+  block.
 
 Removed
 -------
