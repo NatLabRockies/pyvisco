@@ -1,0 +1,82 @@
+v2.1.1 (2026-06-03)
+===================
+
+Documentation-only release adding the JOSS submission materials and
+contributor guidelines. No library code or API changes.
+
+Added
+-----
+
+- ``paper/paper.md`` and ``paper/paper.bib``: JOSS submission manuscript
+  and bibliography. The paper covers the Summary, Statement of need,
+  State of the field, Software design, Research impact statement,
+  AI usage disclosure, Acknowledgements, and References sections required
+  by JOSS, and includes a DOE / DuraMAT 2 funding acknowledgement.
+
+- ``.github/workflows/draft-pdf.yml``: builds a PDF preview of the JOSS
+  paper on every push and pull request that touches ``paper/**``, using
+  the Open Journals ``inara`` container.
+
+- ``CONTRIBUTING.md``: contributor guidelines covering issue reporting,
+  support channel, development install (``pip install -e ".[dev]"``),
+  running the test suite and notebook smoke tests, changelog updates,
+  and the ANSYS APDL verification expectations when touching the fitting
+  routines. Linked from the README.
+
+- ``CODE_OF_CONDUCT.md``: Contributor Covenant 3.0 with the project
+  maintainer (martin.springer@nlr.gov) as the reporting contact.
+  Referenced from ``CONTRIBUTING.md``.
+
+- ``docs/theory.rst``: new "Theory" page in the documentation that
+  includes the root ``theory.md`` (linear viscoelasticity background,
+  Prony series, time-temperature superposition). Enabled the
+  ``dollarmath`` MyST extension in ``docs/conf.py`` so the ``$...$`` and
+  ``$$...$$`` equations render via MathJax.
+
+Changed
+-------
+
+- ``README.md``: corrected the License section from "CLA 1.0" to
+  "BSD 3-Clause" to match ``LICENSE`` and ``pyproject.toml``.
+
+- ``README.md``: added a Contributing section linking to
+  ``CONTRIBUTING.md``.
+
+- ``README.md``: noted that the Voila app can also be run locally with
+  ``voila LinViscoFit.ipynb`` after ``pip install pyvisco``.
+
+- ``docs/api.rst``: removed ``inter`` from the API autosummary. The
+  module is the Voila/ipywidgets GUI orchestration layer and is treated
+  as internal; it remains importable as ``from pyvisco import inter``
+  for the ``LinViscoFit.ipynb`` notebook.
+
+- ``README.md``: rewrote the relative repo links (``sample_data/``,
+  ``tutorials/``, ``verification/``, ``CONTRIBUTING.md``, ``LICENSE``)
+  as absolute GitHub URLs so they resolve both on GitHub and from the
+  Sphinx-rendered README on Read the Docs. The docs now build cleanly
+  with ``-W``.
+
+- Switched the Sphinx HTML theme from ``alabaster`` to
+  `Furo <https://pradyunsg.me/furo/>`_ for a modern look with a light /
+  dark toggle and a wider sidebar. The ``sphinx-rtd-theme`` docs extra
+  in ``pyproject.toml`` was replaced with ``furo``; the custom
+  ``_templates/layout.html`` (used only to inject the function/method
+  CSS under Alabaster) was removed in favour of ``html_css_files`` in
+  ``docs/conf.py``.
+
+- Docstring polish across ``pyvisco/load.py``, ``master.py``,
+  ``prony.py``, ``opt.py``, ``shift.py`` and ``verify.py``: converted
+  quoted identifier references in prose (``'E'``, ``'G'``, ``'E_relax'``,
+  ``'G_relax'``, ``'freq'``, ``'time'``, ``'Set'``, ``'log_aT'``,
+  ``'T'``, ``'tau_i'``, ``'alpha_i'``, ``'exact'``, ``'round'``,
+  ``'min'``, ``'x'``, ``'prony'``) to reST double-backtick inline code so
+  they render in monospace in the API documentation. The numpydoc
+  ``{'E', 'G'}`` literal-choice annotations were left unchanged.
+
+Removed
+-------
+
+- ``cla-1.0.md``: legacy Contributor License Agreement removed to avoid
+  ambiguity with the new ``CONTRIBUTING.md`` workflow.
+
+`Release tag on GitHub <https://github.com/NatLabRockies/pyvisco/releases/tag/v2.1.1>`_
