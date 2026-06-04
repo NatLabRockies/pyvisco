@@ -30,12 +30,12 @@ def discretize(df_master, window="round", nprony=0):
          Contains the master curve data.
     window : {'round', 'exact', 'min'}
         Defines the location of the discretization of the relaxation times.
-        - 'exact' : Use whole window of the experimental data and logarithmically
+        - ``exact`` : Use whole window of the experimental data and logarithmically
         space the relaxation times inbetween.
-        - 'round' : Round the minimum and maximum values of the experimental data
+        - ``round`` : Round the minimum and maximum values of the experimental data
         to the nearest base 10 number and logarithmically space the
         remaining relaxation times inbetween the rounded numbers
-        - 'min'   : Position of relaxation times is optimized during minimization
+        - ``min``   : Position of relaxation times is optimized during minimization
         routine to reduce the number of Prony terms.
     nprony : numeric, default = 0
         Number of Prony terms to be used for the discretization. The number
@@ -700,7 +700,7 @@ def calc_GMaxw(E_0, df_terms, f_min, f_max, decades, modul, **kwargs):
         the necessary number of data points spanning the frequency range for
         an appropriate resolution.
     modul : {'E', 'G'}
-        Indicates wether tensile ('E') or shear ('G') modulus data are provided.
+        Indicates wether tensile (``E``) or shear (``G``) modulus data are provided.
 
     Returns
     -------
@@ -800,16 +800,16 @@ def GMaxw_temp(shift_func, df_GMaxw, df_coeff, df_aT, freq=None):
                     coeff_WLF = df_coeff.values[0].tolist()
                     aT = 10 ** (-shift.WLF(T, *coeff_WLF))
                 elif shift_func == "D4":
-                    coeff_D4 = df_coeff["P4 (C)"].tolist()
+                    coeff_D4 = df_coeff.loc["D4"].tolist()
                     aT = 10 ** (-shift.poly4(T, *coeff_D4))
                 elif shift_func == "D3":
-                    coeff_D3 = df_coeff["P3 (C)"].iloc[0:4].tolist()
+                    coeff_D3 = df_coeff.loc["D3"].iloc[0:4].tolist()
                     aT = 10 ** (-shift.poly3(T, *coeff_D3))
                 elif shift_func == "D2":
-                    coeff_D2 = df_coeff["P2 (C)"].iloc[0:3].tolist()
+                    coeff_D2 = df_coeff.loc["D2"].iloc[0:3].tolist()
                     aT = 10 ** (-shift.poly2(T, *coeff_D2))
                 elif shift_func == "D1":
-                    coeff_D1 = df_coeff["P1 (C)"].iloc[0:2].tolist()
+                    coeff_D1 = df_coeff.loc["D1"].iloc[0:2].tolist()
                     aT = 10 ** (-shift.poly1(T, *coeff_D1))
                 f_shift = aT * df_GMaxw["f"]
             except OverflowError:

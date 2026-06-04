@@ -30,7 +30,7 @@ Requires Python 3.11 or newer.
 
 ## Example data
 
-Bundled example input files live under [`sample_data/`](sample_data/) and
+Bundled example input files live under [`sample_data/`](https://github.com/NatLabRockies/pyvisco/tree/main/sample_data) and
 are also published as a downloadable archive on every GitHub release:
 [`pyvisco-examples.zip`](https://github.com/NatLabRockies/pyvisco/releases/latest/download/pyvisco-examples.zip).
 These files can be loaded directly into the web app, the tutorial
@@ -46,15 +46,16 @@ There are three ways to use pyvisco:
 
    The Space tracks the `main` branch and rebuilds automatically. The
    first request after a period of inactivity may take ~30s while the
-   container wakes up.
+   container wakes up. The same app can also be run locally with
+   `voila LinViscoFit.ipynb` after a `pip install pyvisco`.
 
-2. **Tutorial notebook & scripts.** The [`tutorials/`](tutorials/) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
+2. **Tutorial notebook & scripts.** The [`tutorials/`](https://github.com/NatLabRockies/pyvisco/tree/main/tutorials) folder contains a non-interactive walkthrough notebook (`tutorial.ipynb`) and three standalone Python scripts (`freq_master.py`, `freq_raw.py`, `time_master.py`) mirroring the verification scenarios — suitable for headless / CI / batch use.
 
 3. **As a library.** Import `pyvisco` and call the modules directly. See the [API documentation](https://pyvisco.readthedocs.io/en/latest/) for details.
 
 ## Verification
 
-The Python implementation is verified against the curve-fitting routine of the commercial package ANSYS APDL 2021 R1. The notebooks and reference material cards live in the [`verification/`](verification/) folder and are executed end-to-end on every push.
+The Python implementation is verified against the curve-fitting routine of the commercial package ANSYS APDL 2021 R1. The notebooks and reference material cards live in the [`verification/`](https://github.com/NatLabRockies/pyvisco/tree/main/verification) folder and are executed end-to-end on every push.
 
 ## Citation
 
@@ -79,6 +80,12 @@ Springer, Martin (2022). PYVISCO: A Python library for identifying Prony series 
 }
 ```
 
+## Contributing
+
+Bug reports, questions, and pull requests are welcome. See
+[CONTRIBUTING.md](https://github.com/NatLabRockies/pyvisco/blob/main/CONTRIBUTING.md) for how to report issues, ask for
+support, set up a development environment, and submit changes.
+
 ## License
 
-Released under the [CLA 1.0](LICENSE) license.
+Released under the [BSD 3-Clause](https://github.com/NatLabRockies/pyvisco/blob/main/LICENSE) license.

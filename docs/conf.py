@@ -44,6 +44,15 @@ source_suffix = {
     ".md": "markdown",
 }
 
+# myst-parser: enable $...$ and $$...$$ math (used in theory.md)
+myst_enable_extensions = [
+    "dollarmath",
+]
+
+# theory.md starts at H2 because it is also embedded in the Voila notebook
+# below a top-level header; suppress the resulting MyST warning.
+suppress_warnings = ["myst.header"]
+
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
 autodoc_member_order = "bysource"
@@ -70,7 +79,13 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
+html_theme = "furo"
+
+# Custom stylesheets (used to be wired through _templates/layout.html).
+html_css_files = [
+    "css/functions.css",
+    "css/methods.css",
+]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

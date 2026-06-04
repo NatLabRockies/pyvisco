@@ -117,9 +117,9 @@ def fit_at_pwr(df_raw, gb_ref, gb_shift):
     df_raw : pandas.DataFrame
         Contains the processed raw measurement data.
     gb_ref : int
-        Dataframe 'Set' number of the reference measurement set.
+        Dataframe ``Set`` number of the reference measurement set.
     gb_shift : int
-        Dataframe 'Set' number of the measurement set that is shifted.
+        Dataframe ``Set`` number of the measurement set that is shifted.
 
     Returns
     -------
@@ -276,8 +276,8 @@ def get_aT(df_raw, RefT):
     Returns
     -------
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
 
     See also
     --------
@@ -326,8 +326,8 @@ def get_curve(df_raw, df_aT, RefT):
     df_raw : pandas.DataFrame
         Contains the processed raw measurement data.
     df_aT : pandas.DataFrame
-        Contains the decadic logarithm of the shift factors 'log_aT'
-        and the corresponding temperature values 'T' in degree Celsius.
+        Contains the decadic logarithm of the shift factors ``log_aT``
+        and the corresponding temperature values ``T`` in degree Celsius.
     RefT : int or float
         Reference tempeature of the master curve in Celsius.
 
@@ -599,6 +599,7 @@ def plot_shift_update(df_master, fig, ax):
     modul = df_master.modul
     stor = f"{modul}_stor"
     loss = f"{modul}_loss"
+    relax = f"{modul}_relax"
 
     gb_master = df_master.groupby("Set")
 
@@ -607,10 +608,18 @@ def plot_shift_update(df_master, fig, ax):
     elif len(ax) == 4:
         ax1, lax1, ax2, lax2 = ax
 
+    # Time-domain figures store a single relaxation-modulus axis with the
+    # x-axis as time; frequency-domain figures store storage / loss vs.
+    # frequency on two axes.
+    if df_master.domain == "time":
+        x_col, y1_col = "t", relax
+    else:
+        x_col, y1_col = "f", stor
+
     for i, (_group, df_set) in enumerate(gb_master):
         line1 = lax1[i]
-        line1.set_xdata(df_set["f"])
-        line1.set_ydata(df_set[stor])
+        line1.set_xdata(df_set[x_col])
+        line1.set_ydata(df_set[y1_col])
         if len(ax) == 4:
             line2 = lax2[i]
             line2.set_xdata(df_set["f"])

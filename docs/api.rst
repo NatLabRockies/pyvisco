@@ -15,8 +15,7 @@ API Reference
     master
     opt
     out
-    prony 
+    prony
     shift
     styles
     verify
-    inter
