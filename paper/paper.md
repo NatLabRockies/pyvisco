@@ -31,7 +31,8 @@ joints, and rubbers in seals and dampers, exhibit time- and
 temperature-dependent mechanical behavior. The theory of linear viscoelasticity
 provides a framework to describe this behavior, and the Generalized Maxwell
 model represented through a Prony series is widely adopted in commercial
-finite element analysis (FEA) codes to simulate viscoelastic response under
+finite element analysis (FEA) software to simulate viscoelastic response of
+thermorheologically simple materials under
 mechanical and thermal loads. Identifying the Prony series parameters from
 experimental measurements is, however, a non-trivial multi-step process that
 involves data conditioning, time–temperature superposition (TTSP), shift
@@ -45,26 +46,25 @@ fits Williams–Landel–Ferry (WLF) and polynomial shift functions, and
 identifies the relaxation times $\tau_i$ and moduli $E_i$ (or shear moduli
 $G_i$) of a Prony series compatible with the Generalized Maxwell model. An
 optional minimization routine produces a reduced-term Prony series suitable
-for computationally efficient FEA simulations. The library is exposed both as
-a programmatic API and through a Jupyter-based graphical user interface
-(`LinViscoFit.ipynb`) that runs without local installation as a Voila
-application on Hugging Face Spaces, and
-its outputs are verified against the curve-fitting routine of ANSYS APDL
-2021 R1 using bundled reference cases.
+for computationally efficient FEA simulations. The library is accessible through
+a programmatic application programming interface (API) and through a
+Jupyter-based graphical user interface (`LinViscoFit.ipynb`) that runs without
+local installation as a Voila application on Hugging Face Spaces. Library outputs
+are verified against the curve-fitting routine of ANSYS APDL
+2021 R1 (ANSYS Inc., Canonsburg, Pennsylvania) using bundled reference cases.
 
 # Statement of need
 
-Linear viscoelastic material models are routinely required by researchers and
-engineers working with polymers in structural, thermal, and reliability
-analyses. The underlying mathematics --- the Boltzmann superposition
-integral, the Generalized Maxwell model, and time--frequency
-interconversion via Fourier transformation --- is well established
-[@brinson2015polymer; @ferry1980viscoelastic; @park1999methods;
-@roylance2001engineering], and the time--temperature superposition
-principle (TTSP) [@williams1955temperature] together with the
-Generalized Maxwell representation underpins the workflow described by
-@springer2020fracture, on which `pyvisco` is based. Translating raw
-experimental data into a Prony series suitable for FEA is, however,
+Linear viscoelastic material models are routinely required by researchers
+and engineers working with polymers in structural, thermal, and reliability
+analyses. The underlying mathematical framework is well established and
+combines the Boltzmann superposition integral, the Generalized Maxwell
+model, time--frequency interconversion via Fourier transformation, and
+TTSP [@brinson2015polymer; @ferry1980viscoelastic;
+@park1999methods; @roylance2001engineering; @williams1955temperature].
+This framework forms the basis of the characterization workflow described
+by @springer2020fracture, on which `pyvisco` is built. However, translating raw
+experimental data into a Prony series suitable for FEA is
 tedious and error-prone. The process typically requires:
 
 - shifting isothermal measurement sets in the frequency or time domain to
@@ -78,9 +78,10 @@ tedious and error-prone. The process typically requires:
 - optionally reducing the number of Prony terms to keep FEA simulations
   tractable.
 
-Many researchers implement this pipeline ad-hoc in spreadsheets or short
-scripts, and commercial DMA software (e.g., Netzsch GABO Eplexor, TA
-Instruments TRIOS) typically exposes only a subset of these steps with
+Many researchers implement this pipeline ad hoc in spreadsheets or short
+scripts. Furthermore, commercial dynamic mechanical thermal analysis (DMTA) software
+(e.g., Netzsch GABO Eplexor, TA Instruments TRIOS) typically allows only
+a subset of these steps and offers
 limited interoperability with FEA pre-processors. `pyvisco` was designed to
 fill this gap with a reproducible, open-source workflow that:
 
@@ -92,7 +93,7 @@ fill this gap with a reproducible, open-source workflow that:
 4. is verified against ANSYS APDL on a reference benchmark set kept in the
    repository.
 
-The library targets researchers characterizing polymeric materials (e.g., PV
+The library targets researchers characterizing polymeric materials (e.g., photovoltaic (PV)
 encapsulants, adhesives, elastomers, hydrogels) and engineers preparing
 material cards for viscoelastic FEA simulations.
 
@@ -100,7 +101,7 @@ material cards for viscoelastic FEA simulations.
 
 A number of tools touch parts of the viscoelastic characterization workflow:
 
-- **Commercial DMA software** (Netzsch GABO Eplexor, TA Instruments TRIOS,
+- **Commercial DMTA software** (Netzsch GABO Eplexor, TA Instruments TRIOS,
   Anton Paar RheoCompass) can construct master curves and fit shift
   functions, but Prony series export and reduced-term optimization for FEA
   are limited or absent, and licensing restricts reproducibility.
@@ -119,11 +120,11 @@ A number of tools touch parts of the viscoelastic characterization workflow:
 `pyvisco` was built as a focused, reusable package because none of the above
 combine: (a) a full raw-data-to-Prony-series workflow in a single tool, (b)
 an optimization routine that yields a reduced-term Prony series suitable for
-FEA, (c) verification against a commercial FEA code's own fitting routine,
+FEA, (c) verification against a commercial FEA software's own fitting routine,
 and (d) a zero-install browser interface that lowers the barrier for
-non-Python users in materials labs. Where alternatives are well suited to
+non-Python users working in materials labs. Where alternatives are well suited to
 their target use cases, `pyvisco` complements them by closing the loop
-between DMA measurements and FEA input decks.
+between DMTA measurements and FEA input decks.
 
 # Software design
 
@@ -153,8 +154,8 @@ progressively removes Prony terms and refits, using the ratio of residuals
 ($R^2_{\mathrm{opt}} \approx 1.5\,R^2_0$) as a default stopping heuristic
 that the user can override. Numerical routines build on `numpy`
 [@harris2020array], `scipy` [@virtanen2020scipy], `pandas`
-[@mckinney2010data], and `matplotlib` [@hunter2007matplotlib]; the browser
-UI is served by Voila as a Docker-based Hugging Face Space.
+[@mckinney2010data], and `matplotlib` [@hunter2007matplotlib]; the graphical
+user interface (GUI) is served by Voila as a Docker-based Hugging Face Space.
 
 Outputs include the fitted Prony parameters as CSV, plots in PNG, and a
 single ZIP archive bundling all results for downstream FEA use. The
@@ -164,8 +165,8 @@ executed on every push via GitHub Actions to guard against regressions.
 
 # Research impact statement
 
-`pyvisco` originated to support viscoelastic characterization of photovoltaic
-module encapsulants and interconnect adhesives, as part of the PV
+`pyvisco` originated to support viscoelastic characterization of PV
+module encapsulants and interconnect adhesives, as part of the
 reliability and durability research described by @springer2020fracture.
 Since its initial public release in 2022 the package has been published on
 PyPI, archived on Zenodo with a DOI per release [@springer2022pyvisco],
@@ -192,13 +193,13 @@ structural-dynamic characterization of polymeric foams via time–temperature
 superposition [@lebarbenchon2025foam]; fatigue testing of bitumen binders
 using column specimens [@shine2023bitumen]; nano-indentation DMTA
 characterization of polymeric materials in microelectronic packaging
-[@lin2024nidmta]; viscoelastic and CTE characterization of polymer films
+[@lin2024nidmta]; viscoelastic characterization of polymer films
 [@lin2025polymerfilms]; and biomechanical modeling of handball-induced head
 injuries [@johansson2024handball]. These applications span food science,
 aerospace propellants, electric-machine manufacturing, cellular polymers,
 road-pavement engineering, microelectronics packaging, and sports
 biomechanics, demonstrating that the workflow generalizes well beyond its
-original photovoltaic context.
+original PV context.
 
 By providing a reproducible, open, and FEA-oriented Prony identification
 workflow, `pyvisco` complements existing rheology packages and lowers the
@@ -238,7 +239,7 @@ on which `pyvisco` builds.
 
 This work was authored by the National Laboratory of the Rockies for the
 U.S. Department of Energy (DOE), operated under Contract
-No. DE-AC36-08GO28308. Funding provided as part of the Durable Module
+No. DE-AC36-08GO28308. Funding was provided as part of the Durable Module
 Materials Consortium 2 (DuraMAT 2), funded by the U.S. Department of
 Energy Office of Critical Minerals and Energy Innovation Integrated
 Energy Systems Office, agreement number 38259. The views expressed in
