@@ -174,10 +174,7 @@ def test_set_inp_aT_does_not_emit_chained_assignment_warnings(manual_shift_gui):
             gui.inp_T.value = float(gui.df_aT["T"].iloc[r])
             gui.set_inp_aT({"new": float(gui.df_aT["log_aT"].iloc[r]) - 0.2})
 
-    chained = [
-        w for w in recorded if isinstance(w.message, pd.errors.ChainedAssignmentError)
-    ]
+    chained = [w for w in recorded if isinstance(w.message, pd.errors.ChainedAssignmentError)]
     assert chained == [], (
-        "Chained assignment regressed in set_inp_aT: "
-        f"{[str(w.message) for w in chained]}"
+        f"Chained assignment regressed in set_inp_aT: {[str(w.message) for w in chained]}"
     )

@@ -79,8 +79,14 @@ def test_file_strips_surrounding_quotes(sample_csv, expected_bytes, quote):
 @pytest.mark.parametrize(
     "wrapper",
     ["  {p}", "{p}  ", "  {p}  ", "{p}\n", "\n{p}", "\t{p}\t"],
-    ids=["leading-spaces", "trailing-spaces", "both-spaces", "trailing-newline",
-         "leading-newline", "surrounding-tabs"],
+    ids=[
+        "leading-spaces",
+        "trailing-spaces",
+        "both-spaces",
+        "trailing-newline",
+        "leading-newline",
+        "surrounding-tabs",
+    ],
 )
 def test_file_strips_surrounding_whitespace(sample_csv, expected_bytes, wrapper):
     """Copy-paste from terminals/web pages frequently introduces stray

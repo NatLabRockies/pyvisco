@@ -143,8 +143,7 @@ def file(path):
         # was actually attempted (helpful when the input string contained
         # surrounding quotes, stray whitespace, embedded newlines, etc.).
         raise FileNotFoundError(
-            f"Could not open file (resolved path: {cleaned!r}); "
-            f"original input: {path!r}"
+            f"Could not open file (resolved path: {cleaned!r}); original input: {path!r}"
         ) from exc
 
 
