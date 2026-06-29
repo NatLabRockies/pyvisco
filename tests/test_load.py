@@ -31,6 +31,80 @@ def test_conventions_contains_expected_keys(modul, expected_keys):
 
 
 # ---------------------------------------------------------------------------
+# load.file -- path sanitisation (esp. Windows copy-paste artefacts)
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def sample_csv(sample_data_dir):
+    return sample_data_dir / "time_user_master.csv"
+
+
+@pytest.fixture
+def expected_bytes(sample_csv):
+    return sample_csv.read_bytes()
+
+
+def test_file_accepts_pathlib_path(sample_csv, expected_bytes):
+    assert load.file(sample_csv) == expected_bytes
+
+
+def test_file_accepts_string_path(sample_csv, expected_bytes):
+    assert load.file(str(sample_csv)) == expected_bytes
+
+
+def test_file_accepts_forward_slashes_on_windows(sample_csv, expected_bytes):
+    """Pure forward slashes -- accepted on every platform Python supports."""
+    assert load.file(str(sample_csv).replace("\\", "/")) == expected_bytes
+
+
+def test_file_accepts_mixed_slashes(sample_csv, expected_bytes):
+    """Mixed forward/back slashes -- legal on Windows, harmless elsewhere."""
+    path = str(sample_csv)
+    mixed = path.replace("\\", "/", 1) if "\\" in path else path
+    assert load.file(mixed) == expected_bytes
+
+
+@pytest.mark.parametrize("quote", ['"', "'"])
+def test_file_strips_surrounding_quotes(sample_csv, expected_bytes, quote):
+    """Windows Explorer "Copy as path" / PowerShell wrap the path in
+    double quotes; these would otherwise surface as
+    ``OSError: [Errno 22] Invalid argument`` because ``"`` is illegal in
+    Windows file names.
+    """
+    quoted = f"{quote}{sample_csv}{quote}"
+    assert load.file(quoted) == expected_bytes
+
+
+@pytest.mark.parametrize(
+    "wrapper",
+    ["  {p}", "{p}  ", "  {p}  ", "{p}\n", "\n{p}", "\t{p}\t"],
+    ids=["leading-spaces", "trailing-spaces", "both-spaces", "trailing-newline",
+         "leading-newline", "surrounding-tabs"],
+)
+def test_file_strips_surrounding_whitespace(sample_csv, expected_bytes, wrapper):
+    """Copy-paste from terminals/web pages frequently introduces stray
+    whitespace or newlines; these would otherwise raise
+    ``OSError: [Errno 22] Invalid argument`` on Windows."""
+    assert load.file(wrapper.format(p=sample_csv)) == expected_bytes
+
+
+def test_file_strips_whitespace_around_quotes(sample_csv, expected_bytes):
+    """Combined artefact: quoted path with surrounding whitespace/newline."""
+    assert load.file(f'  "{sample_csv}"  \n') == expected_bytes
+
+
+def test_file_missing_path_raises_descriptive_FileNotFoundError(tmp_path):
+    """When the file doesn't exist the raised error must include the
+    resolved path so users can spot copy-paste artefacts."""
+    missing = tmp_path / "does_not_exist.csv"
+    with pytest.raises(FileNotFoundError) as exc_info:
+        load.file(str(missing))
+    assert "does_not_exist.csv" in str(exc_info.value)
+    assert "resolved path" in str(exc_info.value)
+
+
+# ---------------------------------------------------------------------------
 # user_master (frequency- and time-domain master curves)
 # ---------------------------------------------------------------------------
 
