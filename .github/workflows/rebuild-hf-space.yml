@@ -1,0 +1,42 @@
+name: Rebuild Hugging Face Space
+
+# The pyvisco-voila Space clones NatLabRockies/pyvisco at Docker build
+# time, so a factory rebuild is what propagates new pyvisco releases to
+# the live web app. workflow_dispatch is exposed for occasional manual
+# hotfixes between releases.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  rebuild:
+    name: Factory-rebuild pyvisco-voila Space
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install huggingface_hub
+        run: pip install --quiet "huggingface_hub>=0.24"
+
+      - name: Trigger factory rebuild
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          SPACE_ID: mspringer-nlr/pyvisco-voila
+        run: |
+          python - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          runtime = api.restart_space(
+              repo_id=os.environ["SPACE_ID"],
+              factory_reboot=True,
+          )
+          print(f"Rebuild requested for {os.environ['SPACE_ID']}.")
+          print(f"Stage: {runtime.stage}  Hardware: {runtime.hardware}")
+          PY
