@@ -1,0 +1,58 @@
+v2.1.2 (2026-06-29)
+===================
+
+Bug-fix release. Two user-facing regressions surfaced by the broader
+pandas 3 / Copy-on-Write rollout and by Windows users pasting file
+paths into the tutorial scripts and Voila app are addressed. No public
+API changes.
+
+Fixed
+-----
+
+- ``inter.Control.set_inp_aT``: the "manually adjust shift factors"
+  control in ``LinViscoFit.ipynb`` silently stopped updating the master
+  curve under pandas >= 3. The callback used chained-assignment writes
+  (``self.df_aT["log_aT"].iloc[idx] += delta``) which, with Copy-on-Write
+  enabled, raise ``ChainedAssignmentError`` and modify a temporary copy
+  instead of ``df_aT``. ``master.get_curve`` was then recomputed from
+  the unchanged frame and the displayed figure looked identical to
+  before the edit. The single-row, multi-row-below-RefT, and
+  multi-row-above-RefT branches were all affected. The fix uses
+  ``df.loc[…]`` assignments on the original frame and converts the
+  delta / index comparisons to scalars so the three branches mutate
+  ``df_aT`` as intended.
+
+- ``load.file``: paths copy-pasted on Windows commonly carry surrounding
+  artefacts that surface as ``OSError: [Errno 22] Invalid argument``
+  rather than the expected ``FileNotFoundError``, because the offending
+  characters (``"``, ``'``, leading whitespace, trailing newlines) are
+  not legal in Windows file names. Two common sources are the
+  Windows Explorer / PowerShell *Copy as path* command (wraps the
+  result in double quotes) and copy-paste from terminals or web pages
+  (introduces stray newlines/spaces). ``load.file`` now strips
+  surrounding whitespace and a matched pair of surrounding single or
+  double quotes before opening, accepts ``os.PathLike`` inputs
+  explicitly, and re-raises file-not-found errors as
+  ``FileNotFoundError`` with the resolved path surfaced so the original
+  copy-paste artefact is visible in the message. Forward, back, and
+  mixed slashes were already accepted and remain so.
+
+Added
+-----
+
+- ``tests/test_inter.py``: new dedicated regression suite for the
+  ``inter`` GUI controller. Exercises ``Control.set_inp_aT`` directly
+  on a hand-assembled ``Control`` instance (built via
+  ``Control.__new__`` with widget attributes stubbed) and asserts that
+  ``df_aT`` actually mutates, that the master curve and file-package
+  side-effect dict are refreshed, that ``delta == 0`` is a true no-op,
+  and that no ``pandas.errors.ChainedAssignmentError`` is emitted by
+  any of the three branches.
+
+- ``tests/test_load.py``: 14 new regression tests for ``load.file``
+  covering ``pathlib.Path`` and ``str`` inputs, forward / back / mixed
+  slashes, surrounding single and double quotes, leading / trailing
+  whitespace and newlines, the combined "quoted with whitespace" case,
+  and the descriptive ``FileNotFoundError`` raised for missing files.
+
+`Release tag on GitHub <https://github.com/NatLabRockies/pyvisco/releases/tag/v2.1.2>`_

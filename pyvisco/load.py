@@ -4,9 +4,34 @@ dataframes for further processing.
 """
 
 import io
+import os
 
 import numpy as np
 import pandas as pd
+
+
+def _sanitize_path(path):
+    """Normalize a user-provided file path.
+
+    Accepts ``str``, ``bytes``, or ``os.PathLike``. String paths are
+    stripped of surrounding whitespace and matched surrounding quotes
+    (single or double) -- both common artefacts when paths are pasted on
+    Windows (e.g. Windows Explorer / PowerShell "Copy as path" wraps the
+    result in double quotes, and copy-paste often introduces trailing
+    newlines or leading spaces). These would otherwise surface as a
+    confusing ``OSError: [Errno 22] Invalid argument`` because quotes and
+    whitespace are not valid in Windows file names.
+
+    Forward slashes, back slashes, and mixed slashes are all accepted as
+    given -- ``open()`` already handles those correctly on Windows.
+    """
+    fspath = os.fspath(path)
+    if isinstance(fspath, bytes):
+        return fspath
+    cleaned = fspath.strip()
+    if len(cleaned) >= 2 and cleaned[0] == cleaned[-1] and cleaned[0] in ("'", '"'):
+        cleaned = cleaned[1:-1].strip()
+    return cleaned
 
 
 def conventions(modul):
@@ -84,22 +109,42 @@ def file(path):
 
     Parameters
     ----------
-    path : str
-        Filepath to the file that is being read.
+    path : str or os.PathLike
+        Filepath to the file that is being read. Forward, back, and mixed
+        slashes are all accepted. Surrounding whitespace and a matched
+        pair of surrounding quotes are stripped before opening so that
+        paths copy-pasted from Windows Explorer / PowerShell
+        ("Copy as path", which wraps the result in double quotes) work
+        out of the box.
 
     Returns
     -------
     data : bytes
         File content.
 
+    Raises
+    ------
+    FileNotFoundError
+        If the (sanitized) path does not point to an existing file. The
+        error message includes the path that was actually attempted to
+        aid debugging when the input contained copy-paste artefacts.
+
     Notes
     -----
     This function is included to simplify the file upload within the interactive
     module where graphical dashboards are hosted on a webserver.
     """
-    with open(path, "rb") as file:
-        data = file.read()
-    return data
+    cleaned = _sanitize_path(path)
+    try:
+        with open(cleaned, "rb") as fh:
+            return fh.read()
+    except (FileNotFoundError, OSError) as exc:
+        # Re-raise with the sanitized path surfaced so users can see what
+        # was actually attempted (helpful when the input string contained
+        # surrounding quotes, stray whitespace, embedded newlines, etc.).
+        raise FileNotFoundError(
+            f"Could not open file (resolved path: {cleaned!r}); original input: {path!r}"
+        ) from exc
 
 
 def prep_csv(data):
