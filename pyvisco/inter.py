@@ -1428,19 +1428,23 @@ class Control(Widgets):
         single = self.cb_single.value
         idx0 = self.df_aT["T"][self.df_aT["T"] == self.RefT].index
         idx = self.df_aT["T"][self.df_aT["T"] == self.inp_T.value].index
-        delta = change["new"] - self.df_aT["log_aT"].iloc[idx].values
+        delta = float(change["new"] - self.df_aT.loc[idx, "log_aT"].iloc[0])
 
         # Update shift factors based on user input
+        # Note: assignments use ``df.loc`` on the original frame; chained
+        # writes such as ``df["col"].iloc[i] += x`` silently no-op under
+        # pandas >= 3 Copy-on-Write and would leave the master curve stale.
         if delta != 0.0:
+            i_sel = int(idx[0])
+            i_ref = int(idx0[0])
             if single:
-                self.df_aT["log_aT"].iloc[idx] += delta
-            else:
-                if idx < idx0:
-                    for i in range(0, int(idx.values) + 1):
-                        self.df_aT["log_aT"].iloc[i] += delta
-                elif idx > idx0:
-                    for i in range(int(idx.values), self.df_aT["T"].shape[0]):
-                        self.df_aT["log_aT"].iloc[i] += delta
+                self.df_aT.loc[idx, "log_aT"] += delta
+            elif i_sel < i_ref:
+                for i in range(0, i_sel + 1):
+                    self.df_aT.loc[i, "log_aT"] += delta
+            elif i_sel > i_ref:
+                for i in range(i_sel, self.df_aT["T"].shape[0]):
+                    self.df_aT.loc[i, "log_aT"] += delta
 
             # Update master curve
             self.df_master = master.get_curve(self.df_raw, self.df_aT, self.RefT)
